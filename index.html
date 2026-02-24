@@ -193,7 +193,7 @@
     #page-portfolio .port-toast.show{transform:translateY(0);opacity:1}
     #page-portfolio .port-toast.success{border-color:rgba(16,185,129,.4)}#page-portfolio .port-toast.error{border-color:rgba(239,68,68,.4)}#page-portfolio .port-toast.info{border-color:rgba(6,182,212,.3)}
     @media(max-width:1100px){#page-portfolio .kpi-row{grid-template-columns:repeat(3,1fr)}#page-portfolio .chart-row{grid-template-columns:1fr}#page-portfolio .market-grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:800px){#page-portfolio .port-page{grid-template-columns:1fr}#page-portfolio .sidebar{display:none}#page-portfolio .kpi-row{grid-template-columns:repeat(2,1fr)}#page-portfolio .income-row{grid-template-columns:1fr 1fr}}
+    @media(max-width:800px){#page-portfolio .port-page{grid-template-columns:1fr}#page-portfolio .sidebar{display:none}#page-portfolio .kpi-row{grid-template-columns:repeat(2,1fr)}#page-portfolio .income-row{grid-template-columns:1fr 1fr}#page-portfolio .nav-tabs{display:none}#page-portfolio .port-nav-hamburger{display:block}}
     @media(max-width:500px){#page-portfolio .kpi-row{grid-template-columns:1fr 1fr}#page-portfolio .market-grid{grid-template-columns:1fr}#page-portfolio .income-row{grid-template-columns:1fr}}
     </style>
 
@@ -924,11 +924,21 @@
     <button class="nt" onclick="portSwitchPanel('transactions',this)">Transactions</button>
   </div>
   <div class="nav-r">
+    <button class="port-nav-hamburger" id="portNavHamburger" onclick="portToggleMobileNav()" aria-label="Menu">☰</button>
     <button class="nt" onclick="navigateTo('home')" style="display:flex;align-items:center;gap:.35rem;">← Home</button>
     <button class="notif-btn">🔔<span class="notif-dot"></span></button>
     <div class="avatar-sm" onclick="navigateTo('profile')">RK</div>
   </div>
 </nav>
+<!-- Mobile Nav Dropdown for Portfolio -->
+<div class="port-mobile-nav" id="portMobileNav">
+  <button class="nt active" onclick="portSwitchPanel('portfolio',this);portToggleMobileNav()">📊 Portfolio</button>
+  <button class="nt" onclick="portSwitchPanel('market',this);portToggleMobileNav()">🏢 Marketplace</button>
+  <button class="nt" onclick="portSwitchPanel('income',this);portToggleMobileNav()">💰 Income</button>
+  <button class="nt" onclick="portSwitchPanel('transactions',this);portToggleMobileNav()">🔄 Transactions</button>
+  <button class="nt" onclick="navigateTo('profile');portToggleMobileNav()" style="border-top:1px solid rgba(255,255,255,0.07);margin-top:0.3rem">👤 My Profile</button>
+  <button class="nt" onclick="navigateTo('home');portToggleMobileNav()">🏠 Home</button>
+</div>
 
 <div class="port-page">
   <!-- SIDEBAR -->
@@ -1696,6 +1706,22 @@ const portTxData = [
 let portTradeMode = 'buy';
 let portCurrentProp = null;
 let portInitialized = false;
+
+function portToggleMobileNav() {
+  const nav = document.getElementById('portMobileNav');
+  if (nav) nav.classList.toggle('open');
+}
+
+// Close mobile nav when clicking outside
+document.addEventListener('click', function(e) {
+  const nav = document.getElementById('portMobileNav');
+  const btn = document.getElementById('portNavHamburger');
+  if (nav && btn && nav.classList.contains('open')) {
+    if (!nav.contains(e.target) && !btn.contains(e.target)) {
+      nav.classList.remove('open');
+    }
+  }
+});
 
 function portInit() {
   if (portInitialized) return;
