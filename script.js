@@ -559,5 +559,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.3 });
     const dash = document.getElementById("dashboard");
     if (dash) perfObserver.observe(dash);
-});observe(dash);
 });
