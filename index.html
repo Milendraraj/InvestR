@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InvestR | Fractional Real Estate</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+    <!-- ── Page Router Styles ── -->
+    <style>
+        .app-page { display: none; }
+        .app-page.active { display: block; }
+    </style>
+
+    <!-- ── Portfolio Page Styles ── -->
+    <style id="portfolio-styles">
+    #page-portfolio {
+      --bg:#020617;--bg2:#080f1f;--bg3:#0d1a30;
+      --card:rgba(13,26,48,.9);--card2:rgba(10,20,40,.7);
+      --em:#10b981;--em2:#059669;--cyan:#06b6d4;
+      --amber:#f59e0b;--red:#ef4444;--blue:#3b82f6;--purple:#8b5cf6;
+      --text:#f1f5f9;--dim:#94a3b8;--muted:#475569;
+      --border:rgba(255,255,255,.07);--bem:rgba(16,185,129,.25);
+      --r:12px;--rl:18px;--ease:cubic-bezier(.4,0,.2,1);
+    }
+    #page-portfolio *{box-sizing:border-box}
+    #page-portfolio h1,#page-portfolio h2,#page-portfolio h3,#page-portfolio h4{font-family:'Syne',sans-serif;line-height:1.1}
+    #page-portfolio a{color:inherit;text-decoration:none}
+    #page-portfolio .port-nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 4%;position:sticky;top:0;z-index:100;background:rgba(2,6,23,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    #page-portfolio .port-logo{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800}.port-logo span{color:var(--em)}
+    #page-portfolio .nav-tabs{display:flex;gap:.2rem}
+    #page-portfolio .nt{padding:.5rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;font-family:'Syne',sans-serif;color:var(--dim);cursor:pointer;transition:.2s;border:none;background:none}
+    #page-portfolio .nt:hover{color:var(--text);background:rgba(255,255,255,.05)}
+    #page-portfolio .nt.active{color:var(--em);background:rgba(16,185,129,.1)}
+    #page-portfolio .nav-r{display:flex;align-items:center;gap:.75rem}
+    #page-portfolio .avatar-sm{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--em),var(--cyan));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.8rem;color:#fff;cursor:pointer}
+    #page-portfolio .notif-btn{position:relative;background:none;border:none;color:var(--dim);font-size:1.1rem;cursor:pointer;padding:.3rem}
+    #page-portfolio .notif-dot{position:absolute;top:2px;right:2px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--bg)}
+    #page-portfolio .port-page{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 65px)}
+    #page-portfolio .sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:2rem 1.2rem;display:flex;flex-direction:column;gap:.3rem;position:sticky;top:65px;height:calc(100vh - 65px);overflow-y:auto}
+    #page-portfolio .sb-section{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:1rem 0 .4rem .6rem}
+    #page-portfolio .sb-item{display:flex;align-items:center;gap:.75rem;padding:.65rem .8rem;border-radius:var(--r);color:var(--dim);cursor:pointer;font-size:.88rem;transition:.2s;border:none;background:none;width:100%;text-align:left}
+    #page-portfolio .sb-item:hover{background:rgba(255,255,255,.05);color:var(--text)}
+    #page-portfolio .sb-item.active{background:rgba(16,185,129,.1);color:var(--em)}
+    #page-portfolio .sb-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;background:rgba(255,255,255,.05)}
+    #page-portfolio .sb-item.active .sb-icon{background:rgba(16,185,129,.15)}
+    #page-portfolio .sb-badge{margin-left:auto;background:var(--em);color:#fff;font-size:.65rem;font-weight:800;padding:.15rem .45rem;border-radius:99px;font-family:'Syne',sans-serif}
+    #page-portfolio .sb-badge.amber{background:var(--amber)}
+    #page-portfolio .sidebar-footer{margin-top:auto;padding-top:1rem;border-top:1px solid var(--border)}
+    #page-portfolio .content{padding:2rem;overflow-y:auto;max-height:calc(100vh - 65px);overflow-x:hidden}
+    #page-portfolio .port-panel{display:none}#page-portfolio .port-panel.active{display:block}
+    #page-portfolio .port-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+    #page-portfolio .port-title h1{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;margin-bottom:.3rem}
+    #page-portfolio .port-title p{font-size:.85rem;color:var(--dim)}
+    #page-portfolio .port-actions{display:flex;gap:.6rem}
+    #page-portfolio .btn-em{background:linear-gradient(135deg,var(--em),var(--em2));color:#fff;border:none;padding:.65rem 1.3rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 0 20px rgba(16,185,129,.25);transition:.25s var(--ease);white-space:nowrap}
+    #page-portfolio .btn-em:hover{box-shadow:0 0 35px rgba(16,185,129,.45);transform:translateY(-1px)}
+    #page-portfolio .btn-ghost{background:none;border:1px solid var(--border);color:var(--dim);padding:.65rem 1.1rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:.2s;white-space:nowrap}
+    #page-portfolio .btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+    #page-portfolio .kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:2rem}
+    #page-portfolio .kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:1.2rem;position:relative;overflow:hidden;transition:.3s var(--ease)}
+    #page-portfolio .kpi:hover{border-color:rgba(255,255,255,.12);transform:translateY(-2px)}
+    #page-portfolio .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+    #page-portfolio .kpi.green::before{background:linear-gradient(90deg,var(--em),var(--cyan))}
+    #page-portfolio .kpi.amber::before{background:linear-gradient(90deg,var(--amber),#f97316)}
+    #page-portfolio .kpi.blue::before{background:linear-gradient(90deg,var(--blue),var(--purple))}
+    #page-portfolio .kpi.red::before{background:var(--red)}
+    #page-portfolio .kpi.purple::before{background:linear-gradient(90deg,var(--purple),var(--blue))}
+    #page-portfolio .kpi-icon{font-size:1.3rem;margin-bottom:.6rem;display:block}
+    #page-portfolio .kpi-label{font-size:.68rem;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
+    #page-portfolio .kpi-val{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;display:block;margin-bottom:.2rem}
+    #page-portfolio .kpi-change{font-size:.72rem;display:flex;align-items:center;gap:.3rem}
+    #page-portfolio .kpi-change.up{color:var(--em)}#page-portfolio .kpi-change.down{color:var(--red)}#page-portfolio .kpi-change.neu{color:var(--muted)}
+    #page-portfolio .chart-row{display:grid;grid-template-columns:2fr 1fr;gap:1.2rem;margin-bottom:2rem}
+    #page-portfolio .chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem}
+    #page-portfolio .cc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem}
+    #page-portfolio .cc-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700}
+    #page-portfolio .cc-tabs{display:flex;gap:.3rem}
+    #page-portfolio .cc-tab{padding:.3rem .65rem;border-radius:6px;border:1px solid var(--border);background:none;color:var(--dim);font-size:.72rem;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;transition:.2s}
+    #page-portfolio .cc-tab.active{background:var(--em);color:#fff;border-color:var(--em)}
+    #page-portfolio .svg-line{width:100%;height:140px}
+    #page-portfolio .donut-wrap{display:flex;flex-direction:column;align-items:center;gap:1rem}
+    #page-portfolio .donut{width:130px;height:130px}
+    #page-portfolio .donut-legend{width:100%;display:flex;flex-direction:column;gap:.5rem}
+    #page-portfolio .dl-item{display:flex;align-items:center;justify-content:space-between;font-size:.78rem}
+    #page-portfolio .dl-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;margin-right:.4rem}
+    #page-portfolio .dl-name{flex:1;color:var(--dim);display:flex;align-items:center}
+    #page-portfolio .dl-pct{font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem}
+    #page-portfolio .holdings-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:1.5rem;overflow:hidden}
+    #page-portfolio .holdings-header{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.75rem}
+    #page-portfolio .search-bar{display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);padding:.5rem .9rem;font-size:.82rem;color:var(--dim)}
+    #page-portfolio .search-bar input{background:none;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;width:160px}
+    #page-portfolio .sort-btn{background:none;border:1px solid var(--border);color:var(--dim);padding:.45rem .9rem;border-radius:8px;font-size:.75rem;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;transition:.2s}
+    #page-portfolio .sort-btn:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+    #page-portfolio .holdings-table{width:100%;border-collapse:collapse}
+    #page-portfolio .ht-head th{padding:.9rem 1.2rem;text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);white-space:nowrap}
+    #page-portfolio .ht-head th:last-child{text-align:right}
+    #page-portfolio .ht-row{transition:.2s;cursor:pointer}
+    #page-portfolio .ht-row:hover{background:rgba(255,255,255,.03)}
+    #page-portfolio .ht-row td{padding:.95rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+    #page-portfolio .ht-row:last-child td{border-bottom:none}
+    #page-portfolio .prop-cell{display:flex;align-items:center;gap:.8rem}
+    #page-portfolio .prop-thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;filter:brightness(.85)}
+    #page-portfolio .prop-name{font-weight:600;font-size:.88rem;display:block}
+    #page-portfolio .prop-cat{font-size:.72rem;color:var(--dim)}
+    #page-portfolio .val-cell{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem}
+    #page-portfolio .chg-cell{font-size:.82rem;font-weight:600;font-family:'Syne',sans-serif}
+    #page-portfolio .chg-cell.up{color:var(--em)}#page-portfolio .chg-cell.down{color:var(--red)}
+    #page-portfolio .shares-bar-wrap{width:80px}
+    #page-portfolio .shares-bar{height:4px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+    #page-portfolio .shares-fill{height:100%;background:linear-gradient(90deg,var(--em),var(--cyan));border-radius:99px}
+    #page-portfolio .action-cell{text-align:right;display:flex;justify-content:flex-end;gap:.4rem}
+    #page-portfolio .btn-buy{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:var(--em);padding:.35rem .8rem;border-radius:7px;font-size:.75rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;transition:.2s}
+    #page-portfolio .btn-buy:hover{background:rgba(16,185,129,.2)}
+    #page-portfolio .btn-sell{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--red);padding:.35rem .8rem;border-radius:7px;font-size:.75rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;transition:.2s}
+    #page-portfolio .btn-sell:hover{background:rgba(239,68,68,.15)}
+    #page-portfolio .market-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:1.5rem}
+    #page-portfolio .market-filters{display:flex;gap:.4rem;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+    #page-portfolio .mf-btn{padding:.4rem 1rem;border-radius:99px;border:1px solid var(--border);background:none;color:var(--dim);font-size:.78rem;font-weight:600;cursor:pointer;transition:.2s;font-family:'Syne',sans-serif}
+    #page-portfolio .mf-btn:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+    #page-portfolio .mf-btn.active{background:var(--em);color:#fff;border-color:var(--em)}
+    #page-portfolio .market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border)}
+    #page-portfolio .mk-card{padding:1.2rem;border-right:1px solid var(--border);border-bottom:1px solid var(--border);transition:.2s;cursor:pointer}
+    #page-portfolio .mk-card:hover{background:rgba(255,255,255,.02)}
+    #page-portfolio .mk-card:nth-child(3n){border-right:none}
+    #page-portfolio .mk-img{height:100px;border-radius:var(--r);overflow:hidden;margin-bottom:.8rem;position:relative}
+    #page-portfolio .mk-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.75)}
+    #page-portfolio .mk-roi{position:absolute;top:.5rem;right:.5rem;background:linear-gradient(135deg,var(--em),var(--em2));color:#fff;font-size:.68rem;font-family:'Syne',sans-serif;font-weight:700;padding:.2rem .5rem;border-radius:5px}
+    #page-portfolio .mk-name{font-weight:600;font-size:.88rem;margin-bottom:.2rem}
+    #page-portfolio .mk-loc{font-size:.72rem;color:var(--dim);margin-bottom:.7rem}
+    #page-portfolio .mk-bar{height:3px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-bottom:.3rem}
+    #page-portfolio .mk-fill{height:100%;background:linear-gradient(90deg,var(--em),var(--cyan));border-radius:99px}
+    #page-portfolio .mk-meta{display:flex;justify-content:space-between;font-size:.68rem;color:var(--dim);margin-bottom:.8rem}
+    #page-portfolio .mk-actions{display:flex;gap:.4rem}
+    #page-portfolio .mk-actions .btn-buy{flex:1;text-align:center}
+    #page-portfolio .tx-filters{display:flex;gap:.4rem;margin-bottom:1.2rem;flex-wrap:wrap}
+    #page-portfolio .tx-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
+    #page-portfolio .tx-table{width:100%;border-collapse:collapse}
+    #page-portfolio .tx-table th{padding:.8rem 1.2rem;text-align:left;font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:700}
+    #page-portfolio .tx-table td{padding:.85rem 1.2rem;border-bottom:1px solid rgba(255,255,255,.04);font-size:.82rem;vertical-align:middle}
+    #page-portfolio .tx-table tr:last-child td{border-bottom:none}
+    #page-portfolio .tx-type-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .65rem;border-radius:6px;font-size:.72rem;font-weight:700;font-family:'Syne',sans-serif}
+    #page-portfolio .badge-buy{background:rgba(16,185,129,.1);color:var(--em);border:1px solid rgba(16,185,129,.2)}
+    #page-portfolio .badge-sell{background:rgba(239,68,68,.08);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+    #page-portfolio .badge-div{background:rgba(6,182,212,.1);color:var(--cyan);border:1px solid rgba(6,182,212,.2)}
+    #page-portfolio .badge-pending{background:rgba(245,158,11,.08);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
+    #page-portfolio .tx-status{font-size:.72rem}
+    #page-portfolio .tx-status.done{color:var(--em)}#page-portfolio .tx-status.pend{color:var(--amber)}
+    #page-portfolio .income-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+    #page-portfolio .inc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:1.3rem}
+    #page-portfolio .inc-icon{font-size:1.5rem;margin-bottom:.6rem}
+    #page-portfolio .inc-label{font-size:.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem}
+    #page-portfolio .inc-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:.2rem}
+    #page-portfolio .inc-sub{font-size:.72rem;color:var(--muted)}
+    #page-portfolio .div-timeline{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:1.4rem}
+    #page-portfolio .dt-item{display:flex;align-items:center;gap:1rem;padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    #page-portfolio .dt-item:last-child{border-bottom:none}
+    #page-portfolio .dt-date{font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;min-width:70px;color:var(--dim)}
+    #page-portfolio .dt-prop{flex:1;font-size:.85rem;font-weight:500}
+    #page-portfolio .dt-status{font-size:.72rem;padding:.2rem .55rem;border-radius:5px;font-weight:600;font-family:'Syne',sans-serif}
+    #page-portfolio .dt-paid{background:rgba(16,185,129,.1);color:var(--em)}
+    #page-portfolio .dt-pending{background:rgba(245,158,11,.08);color:var(--amber)}
+    #page-portfolio .dt-amount{font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;color:var(--em);min-width:70px;text-align:right}
+    #page-portfolio .port-modal-overlay{position:fixed;inset:0;background:rgba(2,6,23,.85);backdrop-filter:blur(12px);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+    #page-portfolio .port-modal-overlay.open{opacity:1;pointer-events:all}
+    #page-portfolio .port-modal{background:#0a1628;border:1px solid var(--border);border-radius:22px;padding:2rem;width:100%;max-width:420px;position:relative;transform:scale(.95) translateY(20px);transition:transform .35s var(--ease)}
+    #page-portfolio .port-modal-overlay.open .port-modal{transform:scale(1) translateY(0)}
+    #page-portfolio .port-modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.07);border:none;color:var(--text);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:.8rem;transition:.2s}
+    #page-portfolio .port-modal-close:hover{background:rgba(255,255,255,.14)}
+    #page-portfolio .modal-tabs{display:flex;background:rgba(255,255,255,.04);border-radius:10px;padding:3px;margin-bottom:1.5rem}
+    #page-portfolio .modal-tab{flex:1;padding:.5rem;border-radius:8px;border:none;background:none;color:var(--dim);font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:.2s}
+    #page-portfolio .modal-tab.active.buy{background:rgba(16,185,129,.15);color:var(--em)}
+    #page-portfolio .modal-tab.active.sell{background:rgba(239,68,68,.12);color:var(--red)}
+    #page-portfolio .modal-prop-info{display:flex;align-items:center;gap:.8rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r);padding:.9rem;margin-bottom:1.2rem}
+    #page-portfolio .mpi-img{width:48px;height:48px;border-radius:9px;object-fit:cover;flex-shrink:0;filter:brightness(.8)}
+    #page-portfolio .mpi-name{font-weight:700;font-size:.9rem;display:block}
+    #page-portfolio .mpi-loc{font-size:.72rem;color:var(--dim)}
+    #page-portfolio .mpi-roi{margin-left:auto;font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;color:var(--em)}
+    #page-portfolio .form-label{font-size:.7rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:.4rem}
+    #page-portfolio .modal-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--r);padding:.8rem 1rem;color:var(--text);font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:1rem;transition:.25s;appearance:none}
+    #page-portfolio .modal-input:focus{outline:none;border-color:var(--em);box-shadow:0 0 0 3px rgba(16,185,129,.1)}
+    #page-portfolio .modal-input.sell-mode:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(239,68,68,.1)}
+    #page-portfolio .order-summary{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:1.2rem}
+    #page-portfolio .os-row{display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.4rem}
+    #page-portfolio .os-row:last-child{margin-bottom:0;padding-top:.5rem;border-top:1px solid var(--border);font-weight:700;font-size:.88rem}
+    #page-portfolio .os-row span:last-child{font-family:'Syne',sans-serif;font-weight:700}
+    #page-portfolio .btn-confirm-buy{width:100%;padding:.9rem;border-radius:var(--r);border:none;background:linear-gradient(135deg,var(--em),var(--em2));color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;box-shadow:0 0 25px rgba(16,185,129,.3);transition:.25s var(--ease)}
+    #page-portfolio .btn-confirm-buy:hover{box-shadow:0 0 40px rgba(16,185,129,.5);transform:translateY(-1px)}
+    #page-portfolio .btn-confirm-sell{width:100%;padding:.9rem;border-radius:var(--r);border:none;background:linear-gradient(135deg,var(--red),#dc2626);color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer;box-shadow:0 0 20px rgba(239,68,68,.2);transition:.25s var(--ease)}
+    #page-portfolio .btn-confirm-sell:hover{box-shadow:0 0 35px rgba(239,68,68,.35);transform:translateY(-1px)}
+    #page-portfolio .port-toast{position:fixed;bottom:2rem;right:2rem;background:#0e1a2e;border:1px solid var(--border);border-radius:12px;padding:.9rem 1.3rem;font-size:.88rem;z-index:3000;transform:translateY(100px);opacity:0;transition:all .4s var(--ease);pointer-events:none;min-width:260px;box-shadow:0 16px 40px rgba(0,0,0,.4)}
+    #page-portfolio .port-toast.show{transform:translateY(0);opacity:1}
+    #page-portfolio .port-toast.success{border-color:rgba(16,185,129,.4)}#page-portfolio .port-toast.error{border-color:rgba(239,68,68,.4)}#page-portfolio .port-toast.info{border-color:rgba(6,182,212,.3)}
+    @media(max-width:1100px){#page-portfolio .kpi-row{grid-template-columns:repeat(3,1fr)}#page-portfolio .chart-row{grid-template-columns:1fr}#page-portfolio .market-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:800px){#page-portfolio .port-page{grid-template-columns:1fr}#page-portfolio .sidebar{display:none}#page-portfolio .kpi-row{grid-template-columns:repeat(2,1fr)}#page-portfolio .income-row{grid-template-columns:1fr 1fr}}
+    @media(max-width:500px){#page-portfolio .kpi-row{grid-template-columns:1fr 1fr}#page-portfolio .market-grid{grid-template-columns:1fr}#page-portfolio .income-row{grid-template-columns:1fr}}
+    </style>
+
+    <!-- ── Profile Page Styles ── -->
+    <style id="profile-styles">
+    #page-profile {
+      --bg:#020617;--bg2:#080f1f;--bg3:#0c1a30;
+      --card:rgba(12,24,44,.95);--card2:rgba(8,16,32,.8);
+      --em:#10b981;--em2:#059669;--cyan:#06b6d4;
+      --amber:#f59e0b;--red:#ef4444;--blue:#3b82f6;--purple:#8b5cf6;
+      --text:#f1f5f9;--dim:#94a3b8;--muted:#475569;
+      --border:rgba(255,255,255,.07);--bem:rgba(16,185,129,.2);
+      --r:12px;--rl:18px;--ease:cubic-bezier(.4,0,.2,1);
+    }
+    #page-profile *{box-sizing:border-box}
+    #page-profile h1,#page-profile h2,#page-profile h3,#page-profile h4{font-family:'Syne',sans-serif;line-height:1.1}
+    #page-profile a{color:inherit;text-decoration:none}
+    #page-profile .prof-nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 4%;position:sticky;top:0;z-index:100;background:rgba(2,6,23,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    #page-profile .prof-logo{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800}.prof-logo span{color:var(--em)}
+    #page-profile .nav-bc{font-size:.82rem;color:var(--dim);display:flex;align-items:center;gap:.4rem}
+    #page-profile .nav-bc a{cursor:pointer}#page-profile .nav-bc a:hover{color:var(--em)}#page-profile .nav-bc .cur{color:var(--text);font-weight:500}
+    #page-profile .nav-r{display:flex;gap:.6rem}
+    #page-profile .btn-ghost{background:none;border:1px solid var(--border);color:var(--dim);padding:.5rem 1rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:.2s;white-space:nowrap}
+    #page-profile .btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+    #page-profile .btn-em{background:linear-gradient(135deg,var(--em),var(--em2));color:#fff;border:none;padding:.55rem 1.2rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;box-shadow:0 0 18px rgba(16,185,129,.25);transition:.25s var(--ease)}
+    #page-profile .btn-em:hover{box-shadow:0 0 30px rgba(16,185,129,.45);transform:translateY(-1px)}
+    #page-profile .prof-page{display:grid;grid-template-columns:300px 1fr;gap:0;min-height:calc(100vh - 65px)}
+    #page-profile .left-panel{background:var(--bg2);border-right:1px solid var(--border);padding:2rem 1.5rem;display:flex;flex-direction:column;gap:1.5rem;position:sticky;top:65px;height:calc(100vh - 65px);overflow-y:auto}
+    #page-profile .profile-card{text-align:center}
+    #page-profile .avatar-wrap{position:relative;width:96px;height:96px;margin:0 auto 1rem}
+    #page-profile .avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#10b981,#06b6d4);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:#fff;border:3px solid var(--bg2)}
+    #page-profile .avatar-edit{position:absolute;bottom:2px;right:2px;width:26px;height:26px;border-radius:50%;background:var(--bg3);border:2px solid var(--bg2);display:flex;align-items:center;justify-content:center;font-size:.7rem;cursor:pointer;transition:.2s}
+    #page-profile .avatar-edit:hover{background:var(--em);color:#fff}
+    #page-profile .profile-name{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;margin-bottom:.2rem}
+    #page-profile .profile-tag{font-size:.75rem;color:var(--dim);margin-bottom:.8rem}
+    #page-profile .profile-badges{display:flex;justify-content:center;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+    #page-profile .pb{font-size:.65rem;font-weight:700;padding:.2rem .55rem;border-radius:99px;font-family:'Syne',sans-serif;letter-spacing:.04em}
+    #page-profile .pb-verified{background:rgba(16,185,129,.12);color:var(--em);border:1px solid rgba(16,185,129,.25)}
+    #page-profile .pb-kyc{background:rgba(6,182,212,.1);color:var(--cyan);border:1px solid rgba(6,182,212,.2)}
+    #page-profile .pb-accredited{background:rgba(139,92,246,.1);color:var(--purple);border:1px solid rgba(139,92,246,.2)}
+    #page-profile .profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem}
+    #page-profile .ps-item{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);padding:.7rem .5rem;text-align:center}
+    #page-profile .ps-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;display:block}
+    #page-profile .ps-label{font-size:.65rem;color:var(--dim);margin-top:.1rem}
+    #page-profile .qnav{display:flex;flex-direction:column;gap:.2rem}
+    #page-profile .qnav-section{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:.6rem 0 .3rem .5rem}
+    #page-profile .qn-item{display:flex;align-items:center;gap:.7rem;padding:.6rem .75rem;border-radius:var(--r);color:var(--dim);cursor:pointer;font-size:.85rem;transition:.2s;border:none;background:none;width:100%;text-align:left}
+    #page-profile .qn-item:hover{background:rgba(255,255,255,.05);color:var(--text)}
+    #page-profile .qn-item.active{background:rgba(16,185,129,.1);color:var(--em)}
+    #page-profile .qn-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.85rem;background:rgba(255,255,255,.05);flex-shrink:0}
+    #page-profile .qn-item.active .qn-icon{background:rgba(16,185,129,.15)}
+    #page-profile .qn-arrow{margin-left:auto;font-size:.65rem;opacity:.4}
+    #page-profile .kyc-card{background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:var(--rl);padding:1.1rem}
+    #page-profile .kyc-title{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;margin-bottom:.6rem;display:flex;justify-content:space-between;align-items:center}
+    #page-profile .kyc-pct{color:var(--em);font-size:.9rem}
+    #page-profile .kyc-bar{height:5px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;margin-bottom:.75rem}
+    #page-profile .kyc-fill{height:100%;background:linear-gradient(90deg,var(--em),var(--cyan));border-radius:99px;width:80%;transition:width 1s var(--ease)}
+    #page-profile .kyc-steps{display:flex;flex-direction:column;gap:.4rem}
+    #page-profile .kyc-step{display:flex;align-items:center;gap:.5rem;font-size:.75rem}
+    #page-profile .ks-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:800}
+    #page-profile .ks-done{background:rgba(16,185,129,.15);border:1.5px solid var(--em);color:var(--em)}
+    #page-profile .ks-pending{background:rgba(245,158,11,.08);border:1.5px solid var(--amber);color:var(--amber)}
+    #page-profile .ks-miss{background:rgba(239,68,68,.08);border:1.5px solid var(--red);color:var(--red)}
+    #page-profile .right-content{padding:2rem;overflow-y:auto;max-height:calc(100vh - 65px)}
+    #page-profile .prof-section{display:none}#page-profile .prof-section.active{display:block}
+    #page-profile .sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.75rem}
+    #page-profile .sh h2{font-size:1.4rem;font-weight:800}
+    #page-profile .sh p{font-size:.82rem;color:var(--dim);margin-top:.1rem}
+    #page-profile .prof-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin-bottom:1.2rem;transition:border-color .3s}
+    #page-profile .prof-card:hover{border-color:rgba(255,255,255,.1)}
+    #page-profile .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;flex-wrap:wrap;gap:.5rem}
+    #page-profile .card-title{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;display:flex;align-items:center;gap:.5rem}
+    #page-profile .ct-icon{font-size:1rem}
+    #page-profile .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    #page-profile .form-grid.g3{grid-template-columns:1fr 1fr 1fr}
+    #page-profile .form-grid.g1{grid-template-columns:1fr}
+    #page-profile .field{display:flex;flex-direction:column;gap:.35rem}
+    #page-profile .field.full{grid-column:1/-1}
+    #page-profile label{font-size:.68rem;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+    #page-profile input,#page-profile select,#page-profile textarea{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);padding:.7rem .9rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;transition:.25s;width:100%;appearance:none}
+    #page-profile input:focus,#page-profile select:focus,#page-profile textarea:focus{outline:none;border-color:var(--em);box-shadow:0 0 0 3px rgba(16,185,129,.1)}
+    #page-profile input:disabled,#page-profile select:disabled{opacity:.5;cursor:not-allowed}
+    #page-profile select option{background:#0d1a30}
+    #page-profile .input-note{font-size:.7rem;color:var(--muted);margin-top:.2rem}
+    #page-profile .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    #page-profile .toggle-row:last-child{border-bottom:none}
+    #page-profile .toggle-info strong{display:block;font-size:.88rem;margin-bottom:.1rem}
+    #page-profile .toggle-info span{font-size:.75rem;color:var(--dim)}
+    #page-profile .toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+    #page-profile .toggle input{opacity:0;width:0;height:0}
+    #page-profile .slider{position:absolute;cursor:pointer;inset:0;background:rgba(255,255,255,.1);border-radius:24px;transition:.3s;border:1px solid var(--border)}
+    #page-profile .slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:var(--dim);border-radius:50%;transition:.3s}
+    #page-profile .toggle input:checked + .slider{background:var(--em);border-color:var(--em)}
+    #page-profile .toggle input:checked + .slider::before{transform:translateX(20px);background:#fff}
+    #page-profile .bank-card{display:flex;align-items:center;gap:1rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r);padding:1rem;transition:.2s}
+    #page-profile .bank-card:hover{border-color:rgba(255,255,255,.12)}
+    #page-profile .bank-logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#1e40af,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+    #page-profile .bank-info strong{display:block;font-size:.9rem}
+    #page-profile .bank-info span{font-size:.75rem;color:var(--dim)}
+    #page-profile .bank-status{margin-left:auto;font-size:.72rem;font-weight:700;font-family:'Syne',sans-serif}
+    #page-profile .bank-status.verified{color:var(--em)}#page-profile .bank-status.pending{color:var(--amber)}
+    #page-profile .add-bank-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.85rem;border:1.5px dashed var(--border);border-radius:var(--r);background:none;color:var(--dim);font-size:.85rem;cursor:pointer;transition:.25s;margin-top:.75rem;font-family:'DM Sans',sans-serif}
+    #page-profile .add-bank-btn:hover{border-color:var(--em);color:var(--em);background:rgba(16,185,129,.04)}
+    #page-profile .doc-row{display:flex;align-items:center;gap:1rem;padding:.85rem 1rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r);margin-bottom:.6rem;transition:.2s}
+    #page-profile .doc-row:hover{border-color:rgba(255,255,255,.1)}
+    #page-profile .doc-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+    #page-profile .doc-icon.done{background:rgba(16,185,129,.1)}#page-profile .doc-icon.pending{background:rgba(245,158,11,.1)}#page-profile .doc-icon.missing{background:rgba(239,68,68,.1)}
+    #page-profile .doc-info strong{display:block;font-size:.85rem;margin-bottom:.1rem}
+    #page-profile .doc-info span{font-size:.72rem;color:var(--dim)}
+    #page-profile .doc-status{margin-left:auto;font-size:.72rem;font-weight:700;padding:.25rem .65rem;border-radius:99px;font-family:'Syne',sans-serif;white-space:nowrap}
+    #page-profile .ds-done{background:rgba(16,185,129,.1);color:var(--em);border:1px solid rgba(16,185,129,.2)}
+    #page-profile .ds-pending{background:rgba(245,158,11,.08);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
+    #page-profile .ds-missing{background:rgba(239,68,68,.08);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+    #page-profile .doc-upload-btn{background:none;border:1px solid var(--border);color:var(--dim);padding:.3rem .7rem;border-radius:7px;font-size:.72rem;cursor:pointer;transition:.2s;font-family:'Syne',sans-serif;font-weight:600;white-space:nowrap}
+    #page-profile .doc-upload-btn:hover{border-color:var(--em);color:var(--em)}
+    #page-profile .sec-item{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    #page-profile .sec-item:last-child{border-bottom:none}
+    #page-profile .si-left{display:flex;align-items:center;gap:.8rem}
+    #page-profile .si-icon{font-size:1.2rem}
+    #page-profile .si-info strong{display:block;font-size:.88rem}
+    #page-profile .si-info span{font-size:.74rem;color:var(--dim)}
+    #page-profile .si-status{font-size:.72rem;font-weight:700;font-family:'Syne',sans-serif}
+    #page-profile .si-status.active{color:var(--em)}#page-profile .si-status.inactive{color:var(--muted)}
+    #page-profile .si-btn{background:none;border:1px solid var(--border);color:var(--dim);padding:.35rem .8rem;border-radius:7px;font-size:.75rem;cursor:pointer;transition:.2s;font-family:'Syne',sans-serif;font-weight:600}
+    #page-profile .si-btn:hover{border-color:rgba(255,255,255,.2);color:var(--text)}
+    #page-profile .ref-box{background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:var(--rl);padding:1.5rem;text-align:center}
+    #page-profile .ref-code{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--em);letter-spacing:.12em;margin:1rem 0}
+    #page-profile .ref-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:1.2rem}
+    #page-profile .rs-item{background:rgba(255,255,255,.04);border-radius:var(--r);padding:.8rem;text-align:center}
+    #page-profile .rs-val{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;display:block}
+    #page-profile .rs-label{font-size:.68rem;color:var(--dim)}
+    #page-profile .activity-list{display:flex;flex-direction:column;gap:.5rem}
+    #page-profile .al-item{display:flex;align-items:flex-start;gap:.9rem;padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    #page-profile .al-item:last-child{border-bottom:none}
+    #page-profile .al-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;margin-top:.1rem}
+    #page-profile .al-info strong{display:block;font-size:.85rem;margin-bottom:.1rem}
+    #page-profile .al-info span{font-size:.72rem;color:var(--dim)}
+    #page-profile .al-time{font-size:.7rem;color:var(--muted);margin-left:auto;white-space:nowrap;padding-top:.1rem}
+    #page-profile .pref-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    #page-profile .pref-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r);padding:1rem;cursor:pointer;transition:.2s}
+    #page-profile .pref-card:hover{border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.05)}
+    #page-profile .pref-card.active{border-color:var(--em);background:rgba(16,185,129,.07)}
+    #page-profile .pc-icon{font-size:1.5rem;margin-bottom:.5rem;display:block}
+    #page-profile .pc-name{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;margin-bottom:.2rem}
+    #page-profile .pc-desc{font-size:.72rem;color:var(--dim)}
+    #page-profile .save-bar{position:sticky;bottom:0;background:rgba(2,6,23,.95);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:1rem;display:flex;justify-content:flex-end;gap:.75rem;z-index:50}
+    #page-profile .prof-modal-overlay{position:fixed;inset:0;background:rgba(2,6,23,.85);backdrop-filter:blur(12px);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+    #page-profile .prof-modal-overlay.open{opacity:1;pointer-events:all}
+    #page-profile .prof-modal{background:#0a1628;border:1px solid var(--border);border-radius:22px;padding:2rem;width:100%;max-width:400px;position:relative;transform:scale(.95) translateY(20px);transition:transform .35s var(--ease)}
+    #page-profile .prof-modal-overlay.open .prof-modal{transform:scale(1) translateY(0)}
+    #page-profile .prof-modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.07);border:none;color:var(--text);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:.8rem;transition:.2s}
+    #page-profile .prof-modal-close:hover{background:rgba(255,255,255,.14)}
+    #page-profile .gt{background:linear-gradient(135deg,#10b981,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    #page-profile .prof-toast{position:fixed;bottom:2rem;right:2rem;background:#0e1a2e;border:1px solid var(--border);border-radius:12px;padding:.9rem 1.3rem;font-size:.88rem;z-index:3000;transform:translateY(100px);opacity:0;transition:all .4s var(--ease);pointer-events:none;min-width:260px;box-shadow:0 16px 40px rgba(0,0,0,.4)}
+    #page-profile .prof-toast.show{transform:translateY(0);opacity:1}
+    #page-profile .prof-toast.success{border-color:rgba(16,185,129,.4)}#page-profile .prof-toast.error{border-color:rgba(239,68,68,.4)}#page-profile .prof-toast.info{border-color:rgba(6,182,212,.3)}
+    @media(max-width:900px){#page-profile .prof-page{grid-template-columns:1fr}#page-profile .left-panel{position:static;height:auto;flex-direction:row;flex-wrap:wrap;border-right:none;border-bottom:1px solid var(--border);padding:1.2rem;gap:1rem}#page-profile .profile-card{text-align:left;display:flex;align-items:center;gap:1rem}#page-profile .profile-stats{display:none}#page-profile .qnav{flex-direction:row;flex-wrap:wrap}#page-profile .qnav-section{display:none}#page-profile .qn-arrow{display:none}#page-profile .right-content{max-height:none}}
+    @media(max-width:600px){#page-profile .form-grid{grid-template-columns:1fr}#page-profile .form-grid.g3{grid-template-columns:1fr 1fr}#page-profile .pref-grid{grid-template-columns:1fr}#page-profile .ref-stats{grid-template-columns:1fr 1fr}}
+    </style>
+
+    <!-- ── List Property Page Styles ── -->
+    <style id="list-styles">
+    #page-list {
+      --bg:#020617;--bg2:#080f1f;--bg3:#0d1a30;
+      --card:rgba(13,26,48,0.9);--card2:rgba(15,30,55,0.6);
+      --em:#10b981;--em2:#059669;--cyan:#06b6d4;
+      --amber:#f59e0b;--red:#ef4444;--blue:#3b82f6;
+      --text:#f1f5f9;--dim:#94a3b8;--muted:#475569;
+      --border:rgba(255,255,255,0.07);--bem:rgba(16,185,129,0.25);
+      --r:12px;--rl:18px;--ease:cubic-bezier(.4,0,.2,1);
+    }
+    #page-list *{box-sizing:border-box}
+    #page-list h1,#page-list h2,#page-list h3,#page-list h4,#page-list h5{font-family:'Syne',sans-serif;line-height:1.1}
+    #page-list a{color:inherit;text-decoration:none}
+    #page-list .gt{background:linear-gradient(135deg,#10b981,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    #page-list .list-nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 5%;position:sticky;top:0;z-index:100;background:rgba(2,6,23,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    #page-list .list-logo{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800}.list-logo span{color:var(--em)}
+    #page-list .nav-bc{font-size:.82rem;color:var(--dim);display:flex;align-items:center;gap:.4rem}
+    #page-list .nav-bc a{cursor:pointer}#page-list .nav-bc a:hover{color:var(--em)}#page-list .nav-bc .cur{color:var(--text);font-weight:500}
+    #page-list .btn-nav{padding:.55rem 1.1rem;border-radius:8px;border:1px solid var(--border);background:none;color:var(--dim);font-size:.82rem;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;transition:.2s}
+    #page-list .btn-nav:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+    #page-list .btn-em{background:linear-gradient(135deg,var(--em),var(--em2));color:#fff;border:none;padding:.6rem 1.3rem;border-radius:8px;font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 0 20px rgba(16,185,129,.25);transition:.25s var(--ease)}
+    #page-list .btn-em:hover{box-shadow:0 0 35px rgba(16,185,129,.45);transform:translateY(-1px)}
+    #page-list .list-scene{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+    #page-list .lorb{position:absolute;border-radius:50%;filter:blur(110px);opacity:.25}
+    #page-list .lo1{width:600px;height:600px;background:radial-gradient(circle,#10b981,transparent);top:-150px;left:-150px;animation:lom1 18s ease-in-out infinite}
+    #page-list .lo2{width:400px;height:400px;background:radial-gradient(circle,#3b82f6,transparent);bottom:0;right:0;animation:lom2 22s ease-in-out infinite;opacity:.15}
+    @keyframes lom1{0%,100%{transform:translate(0,0)}50%{transform:translate(80px,60px)}}
+    @keyframes lom2{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,-40px)}}
+    #page-list .list-hero{position:relative;z-index:1;padding:5rem 5% 3rem;text-align:center}
+    #page-list .hero-badge{display:inline-flex;align-items:center;gap:.45rem;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:var(--em);padding:.35rem .9rem;border-radius:99px;font-size:.75rem;font-weight:600;letter-spacing:.04em;margin-bottom:1.5rem}
+    #page-list .hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--em);animation:lpd 2s infinite}
+    @keyframes lpd{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.6)}50%{box-shadow:0 0 0 5px rgba(16,185,129,0)}}
+    #page-list .list-hero h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;margin-bottom:1rem}
+    #page-list .list-hero p{color:var(--dim);max-width:580px;margin:0 auto 2rem;font-size:1rem}
+    #page-list .steps-row{display:flex;justify-content:center;align-items:center;gap:0;flex-wrap:wrap;margin-bottom:0}
+    #page-list .step-pill{display:flex;align-items:center;gap:.5rem;background:var(--card2);border:1px solid var(--border);padding:.5rem 1.1rem;font-size:.78rem;font-weight:500}
+    #page-list .step-pill:first-child{border-radius:99px 0 0 99px}
+    #page-list .step-pill:last-child{border-radius:0 99px 99px 0}
+    #page-list .step-pill.active{background:rgba(16,185,129,.12);border-color:var(--bem);color:var(--em)}
+    #page-list .step-pill .sn{width:20px;height:20px;border-radius:50%;background:var(--muted);color:#fff;font-size:.65rem;font-weight:800;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;flex-shrink:0}
+    #page-list .step-pill.active .sn{background:var(--em)}
+    #page-list .step-pill.done .sn{background:var(--em)}
+    #page-list .step-pill.done{opacity:.7}
+    #page-list .list-main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:0 5% 5rem}
+    #page-list .form-sec{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:2rem;margin-bottom:1.5rem;transition:border-color .3s;display:none}
+    #page-list .form-sec.active-sec{display:block}
+    #page-list .form-sec:hover{border-color:rgba(255,255,255,.11)}
+    #page-list .sec-head{display:flex;align-items:center;gap:.75rem;margin-bottom:1.75rem}
+    #page-list .sec-num{width:36px;height:36px;border-radius:10px;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);color:var(--em);font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    #page-list .sec-head h2{font-size:1.2rem;font-weight:700}
+    #page-list .sec-head p{font-size:.8rem;color:var(--dim);margin-top:.1rem}
+    #page-list .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+    #page-list .form-grid.g3{grid-template-columns:1fr 1fr 1fr}
+    #page-list .form-grid.g1{grid-template-columns:1fr}
+    #page-list .field{display:flex;flex-direction:column;gap:.4rem}
+    #page-list .field.full{grid-column:1/-1}
+    #page-list label{font-size:.73rem;font-weight:700;color:var(--dim);letter-spacing:.05em;text-transform:uppercase}
+    #page-list input,#page-list select,#page-list textarea{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);padding:.75rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;transition:.25s var(--ease);width:100%;appearance:none}
+    #page-list input:focus,#page-list select:focus,#page-list textarea:focus{outline:none;border-color:var(--em);box-shadow:0 0 0 3px rgba(16,185,129,.1)}
+    #page-list input::placeholder,#page-list textarea::placeholder{color:var(--muted)}
+    #page-list select option{background:#0d1a30}
+    #page-list textarea{resize:vertical;min-height:100px;line-height:1.7}
+    #page-list .input-prefix{position:relative}
+    #page-list .input-prefix span{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--dim);font-weight:600;pointer-events:none}
+    #page-list .input-prefix input{padding-left:1.8rem}
+    #page-list .field-hint{font-size:.72rem;color:var(--muted);margin-top:.2rem}
+    #page-list .field-error{font-size:.72rem;color:var(--red);margin-top:.2rem;display:none}
+    #page-list .type-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
+    #page-list .type-card{background:rgba(255,255,255,.03);border:2px solid var(--border);border-radius:var(--rl);padding:1.2rem .8rem;text-align:center;cursor:pointer;transition:.25s var(--ease)}
+    #page-list .type-card:hover{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.04)}
+    #page-list .type-card.sel{border-color:var(--em);background:rgba(16,185,129,.08)}
+    #page-list .type-card .ti{font-size:2rem;margin-bottom:.5rem;display:block}
+    #page-list .type-card .tl{font-size:.8rem;font-weight:600;font-family:'Syne',sans-serif}
+    #page-list .type-card .ts{font-size:.7rem;color:var(--dim);margin-top:.2rem}
+    #page-list .upload-zone{border:2px dashed var(--border);border-radius:var(--rl);padding:2.5rem;text-align:center;cursor:pointer;transition:.3s var(--ease);position:relative;overflow:hidden}
+    #page-list .upload-zone:hover,#page-list .upload-zone.drag{border-color:var(--em);background:rgba(16,185,129,.04)}
+    #page-list .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    #page-list .upload-icon{font-size:2.5rem;margin-bottom:.8rem;display:block}
+    #page-list .upload-zone h4{font-size:.95rem;margin-bottom:.3rem}
+    #page-list .upload-zone p{font-size:.78rem;color:var(--dim)}
+    #page-list .upload-zone .accepted{font-size:.7rem;color:var(--muted);margin-top:.5rem}
+    #page-list .uploaded-files{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+    #page-list .uf-chip{display:flex;align-items:center;gap:.4rem;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);color:var(--em);padding:.3rem .7rem;border-radius:6px;font-size:.75rem;font-weight:500}
+    #page-list .uf-chip button{background:none;border:none;color:var(--em);cursor:pointer;font-size:.9rem;line-height:1;padding:0}
+    #page-list .doc-check{display:flex;flex-direction:column;gap:.6rem}
+    #page-list .dc-item{display:flex;align-items:center;gap:1rem;padding:.9rem 1rem;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:.2s}
+    #page-list .dc-item:hover{border-color:rgba(255,255,255,.12)}
+    #page-list .dc-item.checked{border-color:rgba(16,185,129,.25);background:rgba(16,185,129,.05)}
+    #page-list .dc-cb{width:20px;height:20px;border:2px solid var(--border);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}
+    #page-list .dc-item.checked .dc-cb{background:var(--em);border-color:var(--em);color:#fff;font-size:.75rem}
+    #page-list .dc-info strong{display:block;font-size:.85rem}
+    #page-list .dc-info span{font-size:.72rem;color:var(--dim)}
+    #page-list .dc-req{margin-left:auto;font-size:.68rem;padding:.2rem .5rem;border-radius:4px}
+    #page-list .dc-req.req{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+    #page-list .dc-req.opt{background:rgba(148,163,184,.08);color:var(--muted)}
+    #page-list .terms-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;max-height:160px;overflow-y:auto;font-size:.8rem;color:var(--dim);line-height:1.8;margin-bottom:1rem}
+    #page-list .terms-box::-webkit-scrollbar{width:4px}#page-list .terms-box::-webkit-scrollbar-thumb{background:var(--muted);border-radius:2px}
+    #page-list .check-row{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.75rem;cursor:pointer}
+    #page-list .check-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--em);margin-top:.1rem;flex-shrink:0;cursor:pointer}
+    #page-list .check-row label{font-size:.85rem;color:var(--dim);cursor:pointer;font-weight:400;letter-spacing:0;text-transform:none}
+    #page-list .check-row label a{color:var(--em)}
+    #page-list .nav-btns{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem}
+    #page-list .btn-back{background:none;border:1px solid var(--border);color:var(--dim);padding:.7rem 1.4rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer;transition:.2s}
+    #page-list .btn-back:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+    #page-list .btn-next{background:linear-gradient(135deg,var(--em),var(--em2));color:#fff;border:none;padding:.75rem 2rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;box-shadow:0 0 20px rgba(16,185,129,.25);transition:.25s var(--ease);display:flex;align-items:center;gap:.5rem}
+    #page-list .btn-next:hover{box-shadow:0 0 35px rgba(16,185,129,.45);transform:translateY(-2px)}
+    #page-list .btn-next:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+    #page-list .step-hint{font-size:.78rem;color:var(--muted)}
+    #page-list .preview-card{background:var(--card2);border:1px solid var(--bem);border-radius:var(--rl);padding:1.5rem;margin-bottom:1.5rem}
+    #page-list .preview-card h3{font-size:1rem;margin-bottom:1rem;color:var(--em)}
+    #page-list .preview-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+    #page-list .pv-item .pv-l{font-size:.7rem;color:var(--dim);margin-bottom:.2rem}
+    #page-list .pv-item .pv-v{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem}
+    #page-list .success-screen{display:none;text-align:center;padding:3rem 2rem}
+    #page-list .success-screen.show{display:block}
+    #page-list .success-icon{font-size:4rem;margin-bottom:1.5rem;animation:lbounce 1s ease}
+    @keyframes lbounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-20px)}60%{transform:translateY(-10px)}}
+    #page-list .success-screen h2{font-size:2rem;margin-bottom:.75rem}
+    #page-list .success-screen p{color:var(--dim);max-width:480px;margin:0 auto 2rem;line-height:1.8}
+    #page-list .timeline-steps{display:flex;flex-direction:column;gap:.75rem;text-align:left;background:var(--card2);border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin:2rem 0}
+    #page-list .ts-item{display:flex;align-items:flex-start;gap:.9rem}
+    #page-list .ts-dot{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;font-family:'Syne',sans-serif}
+    #page-list .ts-dot.done{background:rgba(16,185,129,.15);border:2px solid var(--em);color:var(--em)}
+    #page-list .ts-dot.pending{background:rgba(148,163,184,.08);border:2px dashed var(--muted);color:var(--muted)}
+    #page-list .ts-info strong{display:block;font-size:.88rem;margin-bottom:.15rem}
+    #page-list .ts-info span{font-size:.75rem;color:var(--dim)}
+    #page-list .list-ref-box{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:var(--r);padding:.9rem 1.2rem;display:inline-flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
+    #page-list .ref-label{font-size:.72rem;color:var(--dim)}
+    #page-list .ref-id{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--em);letter-spacing:.08em}
+    #page-list .copy-btn{background:none;border:1px solid rgba(16,185,129,.3);color:var(--em);padding:.3rem .7rem;border-radius:6px;font-size:.72rem;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;transition:.2s}
+    #page-list .copy-btn:hover{background:rgba(16,185,129,.1)}
+    #page-list .prog-bar{height:3px;background:var(--border);position:sticky;top:65px;z-index:99}
+    #page-list .prog-fill{height:100%;background:linear-gradient(90deg,var(--em),var(--cyan));transition:width .5s var(--ease)}
+    #page-list .list-toast{position:fixed;bottom:2rem;right:2rem;background:#0e1a2e;border:1px solid var(--border);border-radius:12px;padding:.9rem 1.3rem;font-size:.88rem;z-index:3000;transform:translateY(100px);opacity:0;transition:all .4s var(--ease);pointer-events:none;min-width:260px;box-shadow:0 16px 40px rgba(0,0,0,.4)}
+    #page-list .list-toast.show{transform:translateY(0);opacity:1}
+    #page-list .list-toast.success{border-color:rgba(16,185,129,.4)}
+    #page-list .list-toast.error{border-color:rgba(239,68,68,.4)}
+    @media(max-width:768px){#page-list .type-grid{grid-template-columns:repeat(2,1fr)}#page-list .form-grid{grid-template-columns:1fr}#page-list .form-grid.g3{grid-template-columns:1fr 1fr}#page-list .preview-grid{grid-template-columns:1fr 1fr}#page-list .nav-bc{display:none}}
+    @media(max-width:480px){#page-list .type-grid{grid-template-columns:1fr 1fr}#page-list .steps-row{gap:0}#page-list .step-pill{padding:.4rem .7rem;font-size:.7rem}}
+    </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  GLOBAL ELEMENTS (cursor, noise — always visible)         -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+<div class="noise"></div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  PAGE: HOME (original index.html — unchanged)             -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="page-home" class="app-page active">
+
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+    <div class="logo">Invest<span>R</span></div>
+    <div class="nav-links">
+        <a href="#properties" class="nav-link">Properties</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="navigateTo('portfolio')">Portfolio</a>
+        <a href="#education" class="nav-link">Why Us</a>
+        <a href="#dashboard" class="nav-link">Dashboard</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="navigateTo('list')">List Property</a>
+    </div>
+    <div class="nav-right">
+        <button class="btn-ghost" id="loginBtn">Log In</button>
+        <button class="btn-primary glow" id="startBtn">Start Investing</button>
+    </div>
+    <button class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#properties">Properties</a>
+    <a href="javascript:void(0)" onclick="navigateTo('portfolio')">Portfolio</a>
+    <a href="#education">Why Us</a>
+    <a href="javascript:void(0)" onclick="navigateTo('list')">List Property</a>
+    <button class="btn-primary" style="width:100%;margin-top:1rem">Start Investing</button>
+</div>
+
+<!-- Hero -->
+<header class="hero" id="home">
+    <div class="hero-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="grid-lines"></div>
+    </div>
+    <div class="hero-content">
+        <div class="badge animate-in" style="animation-delay:0.1s">
+            <span class="badge-dot"></span>
+            PropTech Revolution · Seed
+        </div>
+        <h1 class="animate-in" style="animation-delay:0.2s">
+            Own a piece of the<br>
+            world's best<br>
+            <span class="gradient-text">real estate.</span>
+        </h1>
+        <p class="hero-sub animate-in" style="animation-delay:0.35s">
+            Build your portfolio with institutional-grade assets starting from <strong>$500</strong>. Secure, transparent, and fully digital.
+        </p>
+        <div class="hero-btns animate-in" style="animation-delay:0.5s">
+            <button class="btn-main glow" id="exploreBtn">Explore Properties</button>
+            <button class="btn-outline" id="demoBtn">
+                <span class="play-icon">▶</span> Watch Demo
+            </button>
+        </div>
+        <div class="hero-stats animate-in" style="animation-delay:0.65s">
+            <div class="stat">
+                <span class="stat-val" data-target="2.4">0</span><span>B+</span>
+                <span class="stat-label">Assets Under Management</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-val" data-target="48">0</span><span>K+</span>
+                <span class="stat-label">Active Investors</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-val" data-target="12.3">0</span><span>%</span>
+                <span class="stat-label">Average Annual Return</span>
+            </div>
+        </div>
+    </div>
+    <div class="hero-visual animate-in" style="animation-delay:0.4s">
+        <div class="portfolio-card floating">
+            <div class="pc-header">
+                <span>Portfolio Value</span>
+                <span class="pc-up">▲ +2.4%</span>
+            </div>
+            <div class="pc-amount">$24,832<span>.50</span></div>
+            <div class="pc-chart">
+                <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.4"/>
+                            <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M0 55 Q20 40 40 45 T80 30 T120 20 T160 10 T200 5 L200 60 L0 60Z" fill="url(#chartGrad)"/>
+                    <path d="M0 55 Q20 40 40 45 T80 30 T120 20 T160 10 T200 5" fill="none" stroke="#10b981" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="pc-holdings">
+                <div class="holding">
+                    <span class="h-dot" style="background:#10b981"></span>
+                    <span>Commercial</span>
+                    <span class="h-pct">42%</span>
+                </div>
+                <div class="holding">
+                    <span class="h-dot" style="background:#06b6d4"></span>
+                    <span>Residential</span>
+                    <span class="h-pct">35%</span>
+                </div>
+                <div class="holding">
+                    <span class="h-dot" style="background:#f59e0b"></span>
+                    <span>Industrial</span>
+                    <span class="h-pct">23%</span>
+                </div>
+            </div>
+        </div>
+        <div class="notif-card floating" style="animation-delay:-1.5s">
+            <span class="notif-icon">💰</span>
+            <div>
+                <strong>Dividend Received</strong>
+                <span>+$124.00 from Azure Heights</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Stats Banner -->
+<section class="stats-banner" id="stats">
+    <div class="sb-item">
+        <i data-lucide="shield-check"></i>
+        <span>SEC Regulated</span>
+    </div>
+    <div class="sb-sep">—</div>
+    <div class="sb-item">
+        <i data-lucide="lock"></i>
+        <span>256-bit Encryption</span>
+    </div>
+    <div class="sb-sep">—</div>
+    <div class="sb-item">
+        <i data-lucide="trending-up"></i>
+        <span>Avg. 12.3% ROI</span>
+    </div>
+    <div class="sb-sep">—</div>
+    <div class="sb-item">
+        <i data-lucide="users"></i>
+        <span>48,000+ Investors</span>
+    </div>
+    <div class="sb-sep">—</div>
+    <div class="sb-item">
+        <i data-lucide="globe"></i>
+        <span>32 Countries</span>
+    </div>
+</section>
+
+<!-- Properties -->
+<section class="properties" id="properties">
+    <div class="section-header">
+        <div>
+            <p class="section-eyebrow">Curated Listings</p>
+            <h2>Featured Properties</h2>
+        </div>
+        <div class="filters" id="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="commercial">Commercial</button>
+            <button class="filter-btn" data-filter="residential">Residential</button>
+            <button class="filter-btn" data-filter="industrial">Industrial</button>
+        </div>
+    </div>
+    <div class="property-grid" id="propertyGrid"></div>
+    <div class="load-more-wrap">
+        <button class="btn-outline" id="loadMoreBtn">Load More Properties</button>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works" id="education">
+    <div class="section-header">
+        <div>
+            <p class="section-eyebrow">Simple Process</p>
+            <h2>How InvestR Works</h2>
+        </div>
+    </div>
+    <div class="steps-grid">
+        <div class="step-card">
+            <div class="step-num">STEP 01</div>
+            <span class="step-icon">🔍</span>
+            <h3>Browse Properties</h3>
+            <p>Explore curated, institutional-grade real estate from global markets.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card">
+            <div class="step-num">STEP 02</div>
+            <span class="step-icon">✅</span>
+            <h3>Verify & Invest</h3>
+            <p>Complete KYC in minutes. Invest from as little as $500 in any property.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card">
+            <div class="step-num">STEP 03</div>
+            <span class="step-icon">💰</span>
+            <h3>Earn Returns</h3>
+            <p>Receive monthly rental income and benefit from property appreciation.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card">
+            <div class="step-num">STEP 04</div>
+            <span class="step-icon">📊</span>
+            <h3>Track & Grow</h3>
+            <p>Monitor your portfolio in real-time and reinvest your earnings.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Dashboard Preview -->
+<section class="dashboard-preview" id="dashboard">
+    <div class="section-header">
+        <div>
+            <p class="section-eyebrow">Investor Dashboard</p>
+            <h2>Your Portfolio, Simplified</h2>
+        </div>
+        <button class="btn-outline" onclick="navigateTo('portfolio')">Go to Full Dashboard →</button>
+    </div>
+    <div class="dash-container">
+        <div class="dash-sidebar">
+            <div class="dash-nav-item active" data-panel="overview">
+                <span>📊</span> Overview
+            </div>
+            <div class="dash-nav-item" data-panel="portfolio">
+                <span>🏠</span> Portfolio
+            </div>
+            <div class="dash-nav-item" data-panel="transactions">
+                <span>💸</span> Transactions
+            </div>
+            <div class="dash-nav-item" data-panel="analytics">
+                <span>📈</span> Analytics
+            </div>
+        </div>
+        <div class="dash-main">
+            <div class="dash-panel active" id="panel-overview">
+                <div class="dash-kpis">
+                    <div class="kpi-card">
+                        <span class="kpi-label">Total Invested</span>
+                        <span class="kpi-val">$24,500</span>
+                        <span class="kpi-change positive">▲ 4.2%</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Monthly Income</span>
+                        <span class="kpi-val">$312</span>
+                        <span class="kpi-change positive">▲ 8.1%</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Properties Owned</span>
+                        <span class="kpi-val">7</span>
+                        <span class="kpi-change">Across 3 cities</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-label">Avg. ROI</span>
+                        <span class="kpi-val">11.8%</span>
+                        <span class="kpi-change positive">Above market</span>
+                    </div>
+                </div>
+                <div class="dash-recent">
+                    <h4>Recent Activity</h4>
+                    <div class="activity-list" id="activityList"></div>
+                </div>
+            </div>
+            <div class="dash-panel" id="panel-portfolio">
+                <div class="portfolio-list" id="portfolioList"></div>
+            </div>
+            <div class="dash-panel" id="panel-transactions">
+                <div class="tx-list" id="txList"></div>
+            </div>
+            <div class="dash-panel" id="panel-analytics">
+                <div class="analytics-content">
+                    <div class="allocation-chart">
+                        <div class="donut-wrap">
+                            <svg class="donut" viewBox="0 0 120 120">
+                                <circle class="donut-seg" cx="60" cy="60" r="45" fill="none" stroke="#10b981" stroke-width="20" stroke-dasharray="119 283" stroke-dashoffset="0"/>
+                                <circle class="donut-seg" cx="60" cy="60" r="45" fill="none" stroke="#06b6d4" stroke-width="20" stroke-dasharray="99 283" stroke-dashoffset="-119"/>
+                                <circle class="donut-seg" cx="60" cy="60" r="45" fill="none" stroke="#f59e0b" stroke-width="20" stroke-dasharray="65 283" stroke-dashoffset="-218"/>
+                                <text x="60" y="55" text-anchor="middle" fill="#f8fafc" font-size="10" font-weight="700">$24.8K</text>
+                                <text x="60" y="70" text-anchor="middle" fill="#94a3b8" font-size="7">Total Value</text>
+                            </svg>
+                            <div class="donut-legend">
+                                <div class="leg-item"><span style="background:#10b981"></span> Commercial 42%</div>
+                                <div class="leg-item"><span style="background:#06b6d4"></span> Residential 35%</div>
+                                <div class="leg-item"><span style="background:#f59e0b"></span> Industrial 23%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="performance-bars">
+                        <h4>Property Performance</h4>
+                        <div class="perf-bar-list" id="perfBars"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal: Login -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal">
+        <button class="modal-close" data-close="loginModal">✕</button>
+        <h2>Welcome Back</h2>
+        <p class="modal-sub">Log in to your InvestR account</p>
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="you@example.com" id="loginEmail">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="••••••••" id="loginPassword">
+        </div>
+        <button class="btn-main glow" style="width:100%;margin-top:1rem" id="loginSubmit">Log In</button>
+        <p class="modal-footer">Don't have an account? <a href="#" id="switchToSignup">Sign Up</a></p>
+    </div>
+</div>
+
+<!-- Modal: Signup -->
+<div class="modal-overlay" id="signupModal">
+    <div class="modal">
+        <button class="modal-close" data-close="signupModal">✕</button>
+        <h2>Start Investing</h2>
+        <p class="modal-sub">Create your free account today</p>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="John Smith">
+        </div>
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="Min. 8 characters">
+        </div>
+        <button class="btn-main glow" style="width:100%;margin-top:1rem" id="signupSubmit">Create Account</button>
+        <p class="modal-footer">Already have an account? <a href="#" id="switchToLogin">Log In</a></p>
+    </div>
+</div>
+
+<!-- Modal: Property Detail -->
+<div class="modal-overlay" id="propertyModal">
+    <div class="modal modal-wide">
+        <button class="modal-close" data-close="propertyModal">✕</button>
+        <div id="propertyModalContent"></div>
+    </div>
+</div>
+
+<!-- Modal: Demo -->
+<div class="modal-overlay" id="demoModal">
+    <div class="modal">
+        <button class="modal-close" data-close="demoModal">✕</button>
+        <h2>Platform Demo</h2>
+        <p class="modal-sub">See how InvestR works in 60 seconds</p>
+        <div class="demo-video-placeholder">
+            <span class="play-big">▶</span>
+            <p>Interactive Demo</p>
+        </div>
+        <p style="font-size:0.85rem;color:#94a3b8;text-align:center;margin-top:1rem">Get started in minutes — no experience required.</p>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <div class="logo">Invest<span>R</span></div>
+            <p>Democratizing real estate investment for everyone.</p>
+        </div>
+        <div class="footer-links">
+            <div>
+                <h4>Product</h4>
+                <a href="#">Properties</a>
+                <a href="javascript:void(0)" onclick="navigateTo('portfolio')">Portfolio</a>
+                <a href="#education">How It Works</a>
+                <a href="javascript:void(0)" onclick="navigateTo('list')">List Property</a>
+            </div>
+            <div>
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+            </div>
+            <div>
+                <h4>Legal</h4>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Disclosures</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 InvestR Inc. All rights reserved. Past performance is not indicative of future results.</p>
+        <p>Labana Milendra</p>
+    </div>
+</footer>
+
+</div><!-- /page-home -->
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  PAGE: PORTFOLIO (portfolio.html — unchanged content)     -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="page-portfolio" class="app-page">
+
+<!-- NAV -->
+<nav class="port-nav">
+  <div class="port-logo">Invest<span>R</span></div>
+  <div class="nav-tabs">
+    <button class="nt active" onclick="portSwitchPanel('portfolio',this)">Portfolio</button>
+    <button class="nt" onclick="portSwitchPanel('market',this)">Marketplace</button>
+    <button class="nt" onclick="portSwitchPanel('income',this)">Income</button>
+    <button class="nt" onclick="portSwitchPanel('transactions',this)">Transactions</button>
+  </div>
+  <div class="nav-r">
+    <button class="nt" onclick="navigateTo('home')" style="display:flex;align-items:center;gap:.35rem;">← Home</button>
+    <button class="notif-btn">🔔<span class="notif-dot"></span></button>
+    <div class="avatar-sm" onclick="navigateTo('profile')">RK</div>
+  </div>
+</nav>
+
+<div class="port-page">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-section">Main</div>
+    <button class="sb-item active" onclick="portSwitchPanel('portfolio',this)"><span class="sb-icon">📊</span> Overview</button>
+    <button class="sb-item" onclick="portSwitchPanel('market',this)"><span class="sb-icon">🏢</span> Marketplace <span class="sb-badge">12</span></button>
+    <button class="sb-item" onclick="portSwitchPanel('income',this)"><span class="sb-icon">💰</span> Income & Dividends</button>
+    <button class="sb-item" onclick="portSwitchPanel('transactions',this)"><span class="sb-icon">🔄</span> Transactions</button>
+    <div class="sb-section">Account</div>
+    <button class="sb-item" onclick="navigateTo('profile')"><span class="sb-icon">👤</span> My Profile</button>
+    <button class="sb-item"><span class="sb-icon">🏦</span> Linked Bank</button>
+    <button class="sb-item"><span class="sb-icon">📄</span> Tax Reports <span class="sb-badge amber">New</span></button>
+    <button class="sb-item"><span class="sb-icon">⚙️</span> Settings</button>
+    <div class="sidebar-footer">
+      <button class="sb-item" onclick="navigateTo('list')"><span class="sb-icon">➕</span> List a Property</button>
+      <button class="sb-item" onclick="navigateTo('home')"><span class="sb-icon">🏠</span> Home</button>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ── PORTFOLIO PANEL ── -->
+    <div class="port-panel active" id="port-panel-portfolio">
+      <div class="port-header">
+        <div class="port-title">
+          <h1>My Portfolio</h1>
+          <p>Last updated: Feb 22, 2026 · 9:41 AM IST</p>
+        </div>
+        <div class="port-actions">
+          <button class="btn-ghost" onclick="portShowToast('Downloading report...','info')">⬇ Export</button>
+          <button class="btn-em" onclick="portSwitchPanel('market',null)">+ Buy More</button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-row">
+        <div class="kpi green"><span class="kpi-icon">💼</span><div class="kpi-label">Total Invested</div><span class="kpi-val">$24,500</span><div class="kpi-change up">▲ +$980 this month</div></div>
+        <div class="kpi green"><span class="kpi-icon">📈</span><div class="kpi-label">Current Value</div><span class="kpi-val">$27,832</span><div class="kpi-change up">▲ +13.6% all time</div></div>
+        <div class="kpi amber"><span class="kpi-icon">💵</span><div class="kpi-label">Total Earnings</div><span class="kpi-val">$3,332</span><div class="kpi-change up">▲ +$312 this month</div></div>
+        <div class="kpi blue"><span class="kpi-icon">🏠</span><div class="kpi-label">Properties</div><span class="kpi-val">7</span><div class="kpi-change neu">Across 4 countries</div></div>
+        <div class="kpi purple"><span class="kpi-icon">📅</span><div class="kpi-label">Next Payout</div><span class="kpi-val">Mar 5</span><div class="kpi-change up">Est. +$312</div></div>
+      </div>
+
+      <!-- Charts -->
+      <div class="chart-row">
+        <div class="chart-card">
+          <div class="cc-header">
+            <span class="cc-title">Portfolio Performance</span>
+            <div class="cc-tabs">
+              <button class="cc-tab active">1M</button>
+              <button class="cc-tab">3M</button>
+              <button class="cc-tab">6M</button>
+              <button class="cc-tab">1Y</button>
+              <button class="cc-tab">All</button>
+            </div>
+          </div>
+          <svg class="svg-line" viewBox="0 0 500 140" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="portLineGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#10b981" stop-opacity=".3"/>
+                <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0 130 L50 125 L100 118 L150 105 L200 110 L250 92 L300 80 L350 65 L400 50 L450 38 L500 20 L500 140 L0 140Z" fill="url(#portLineGrad)"/>
+            <path d="M0 130 L50 125 L100 118 L150 105 L200 110 L250 92 L300 80 L350 65 L400 50 L450 38 L500 20" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+            <text x="25" y="138" font-size="8" fill="#475569" text-anchor="middle">Feb 1</text>
+            <text x="125" y="138" font-size="8" fill="#475569" text-anchor="middle">Feb 8</text>
+            <text x="250" y="138" font-size="8" fill="#475569" text-anchor="middle">Feb 15</text>
+            <text x="375" y="138" font-size="8" fill="#475569" text-anchor="middle">Feb 22</text>
+          </svg>
+        </div>
+        <div class="chart-card">
+          <div class="cc-header"><span class="cc-title">Allocation</span></div>
+          <div class="donut-wrap">
+            <svg class="donut" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="44" fill="none" stroke="#10b981" stroke-width="18" stroke-dasharray="124 277" stroke-dashoffset="0"/>
+              <circle cx="60" cy="60" r="44" fill="none" stroke="#06b6d4" stroke-width="18" stroke-dasharray="97 277" stroke-dashoffset="-124"/>
+              <circle cx="60" cy="60" r="44" fill="none" stroke="#f59e0b" stroke-width="18" stroke-dasharray="56 277" stroke-dashoffset="-221"/>
+              <text x="60" y="56" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="700" font-family="Syne,sans-serif">$27.8K</text>
+              <text x="60" y="68" text-anchor="middle" fill="#94a3b8" font-size="7">Portfolio</text>
+            </svg>
+            <div class="donut-legend">
+              <div class="dl-item"><div class="dl-name"><span class="dl-dot" style="background:#10b981"></span>Commercial</div><span class="dl-pct">45%</span></div>
+              <div class="dl-item"><div class="dl-name"><span class="dl-dot" style="background:#06b6d4"></span>Residential</div><span class="dl-pct">35%</span></div>
+              <div class="dl-item"><div class="dl-name"><span class="dl-dot" style="background:#f59e0b"></span>Industrial</div><span class="dl-pct">20%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Holdings Table -->
+      <div class="holdings-card">
+        <div class="holdings-header">
+          <h3 style="font-size:1rem">My Holdings</h3>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <div class="search-bar">🔍 <input type="text" placeholder="Search properties..." oninput="portFilterHoldings(this.value)"></div>
+            <button class="sort-btn">Sort ↕</button>
+            <button class="btn-ghost" style="font-size:.75rem;padding:.45rem .8rem">Filter</button>
+          </div>
+        </div>
+        <table class="holdings-table">
+          <thead class="ht-head">
+            <tr>
+              <th>Property</th><th>Invested</th><th>Current Value</th><th>Return</th><th>Yield</th><th>Shares</th><th style="text-align:right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="portHoldingsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── MARKETPLACE PANEL ── -->
+    <div class="port-panel" id="port-panel-market">
+      <div class="port-header">
+        <div class="port-title"><h1>Marketplace</h1><p>Browse and invest in available properties</p></div>
+        <div class="port-actions">
+          <button class="btn-ghost">⚙ Filters</button>
+          <button class="btn-em" onclick="navigateTo('list')">+ List Property</button>
+        </div>
+      </div>
+      <div class="market-card">
+        <div class="market-filters" id="portMarketFilters">
+          <button class="mf-btn active" data-f="all">All Properties</button>
+          <button class="mf-btn" data-f="commercial">Commercial</button>
+          <button class="mf-btn" data-f="residential">Residential</button>
+          <button class="mf-btn" data-f="industrial">Industrial</button>
+          <button class="mf-btn" data-f="high-yield">High Yield 12%+</button>
+          <button class="mf-btn" data-f="new">New Listings</button>
+        </div>
+        <div class="market-grid" id="portMarketGrid"></div>
+      </div>
+    </div>
+
+    <!-- ── INCOME PANEL ── -->
+    <div class="port-panel" id="port-panel-income">
+      <div class="port-header">
+        <div class="port-title"><h1>Income & Dividends</h1><p>Track all your rental income and distributions</p></div>
+        <button class="btn-ghost" onclick="portShowToast('Downloading income report...','info')">⬇ Download PDF</button>
+      </div>
+      <div class="income-row">
+        <div class="inc-card"><div class="inc-icon">💵</div><div class="inc-label">This Month</div><div class="inc-val" style="color:var(--em)">$312.50</div><div class="inc-sub">3 properties paid</div></div>
+        <div class="inc-card"><div class="inc-icon">📅</div><div class="inc-label">This Year (2026)</div><div class="inc-val">$624.00</div><div class="inc-sub">2 months completed</div></div>
+        <div class="inc-card"><div class="inc-icon">🏆</div><div class="inc-label">All Time Earned</div><div class="inc-val">$3,332</div><div class="inc-sub">Since Jan 2024</div></div>
+      </div>
+      <div class="div-timeline">
+        <div class="cc-header" style="margin-bottom:1rem"><span class="cc-title">Distribution History</span><button class="sort-btn">Filter by Year ▾</button></div>
+        <div id="portDivTimeline"></div>
+      </div>
+    </div>
+
+    <!-- ── TRANSACTIONS PANEL ── -->
+    <div class="port-panel" id="port-panel-transactions">
+      <div class="port-header">
+        <div class="port-title"><h1>Transactions</h1><p>Complete history of all your activity</p></div>
+        <button class="btn-ghost" onclick="portShowToast('Downloading statement...','info')">⬇ Export CSV</button>
+      </div>
+      <div class="tx-filters">
+        <button class="mf-btn active">All</button><button class="mf-btn">Buy</button><button class="mf-btn">Sell</button><button class="mf-btn">Dividends</button><button class="mf-btn">Pending</button>
+      </div>
+      <div class="tx-card">
+        <table class="tx-table">
+          <thead><tr><th>Date</th><th>Type</th><th>Property</th><th>Shares</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody id="portTxBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /port-page -->
+
+<!-- BUY/SELL MODAL -->
+<div class="port-modal-overlay" id="portTradeModal">
+  <div class="port-modal">
+    <button class="port-modal-close" onclick="portCloseModal()">✕</button>
+    <div class="modal-tabs">
+      <button class="modal-tab active buy" id="portTabBuy" onclick="portSetTradeMode('buy')">Buy Shares</button>
+      <button class="modal-tab sell" id="portTabSell" onclick="portSetTradeMode('sell')">Sell Shares</button>
+    </div>
+    <div class="modal-prop-info">
+      <img src="" id="port-modal-img" class="mpi-img" alt="">
+      <div><span class="mpi-name" id="port-modal-name">—</span><div class="mpi-loc" id="port-modal-loc">—</div></div>
+      <div class="mpi-roi" id="port-modal-roi">—</div>
+    </div>
+    <label class="form-label" id="port-modal-label">NUMBER OF SHARES</label>
+    <input type="number" class="modal-input" id="port-modal-shares" value="1" min="1" oninput="portUpdateOrderSummary()">
+    <div class="order-summary" id="portOrderSummary"></div>
+    <button class="btn-confirm-buy" id="portConfirmBtn" onclick="portConfirmTrade()">Confirm Purchase</button>
+  </div>
+</div>
+
+<div class="port-toast" id="portToast"></div>
+
+</div><!-- /page-portfolio -->
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  PAGE: PROFILE (profile.html — unchanged content)         -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="page-profile" class="app-page">
+
+<nav class="prof-nav">
+  <div class="prof-logo">Invest<span>R</span></div>
+  <div class="nav-bc">
+    <a onclick="navigateTo('portfolio')">Portfolio</a><span>›</span>
+    <span class="cur">My Profile</span>
+  </div>
+  <div class="nav-r">
+    <button class="btn-ghost" onclick="navigateTo('portfolio')">← Dashboard</button>
+    <button class="btn-em" onclick="profSaveProfile()">Save Changes</button>
+  </div>
+</nav>
+
+<div class="prof-page">
+  <!-- LEFT PANEL -->
+  <aside class="left-panel">
+    <div class="profile-card">
+      <div class="avatar-wrap">
+        <div class="avatar" id="profAvatarDisplay">RK</div>
+        <div class="avatar-edit" onclick="profShowToast('Photo upload coming soon!','info')">✏️</div>
+      </div>
+      <div class="profile-name" id="profDisplayName">Rahul Kumar</div>
+      <div class="profile-tag" id="profDisplayTag">Member since Jan 2024 · ID: INV-001823</div>
+      <div class="profile-badges">
+        <span class="pb pb-verified">✓ Verified</span>
+        <span class="pb pb-kyc">KYC Done</span>
+        <span class="pb pb-accredited">Accredited</span>
+      </div>
+      <div class="profile-stats">
+        <div class="ps-item"><span class="ps-val" style="color:var(--em)">$27.8K</span><span class="ps-label">Portfolio</span></div>
+        <div class="ps-item"><span class="ps-val">7</span><span class="ps-label">Properties</span></div>
+        <div class="ps-item"><span class="ps-val" style="color:var(--em)">11.8%</span><span class="ps-label">Avg ROI</span></div>
+        <div class="ps-item"><span class="ps-val">$3.3K</span><span class="ps-label">Earned</span></div>
+      </div>
+    </div>
+
+    <div class="qnav">
+      <div class="qnav-section">Profile</div>
+      <button class="qn-item active" onclick="profSwitchSection('personal',this)"><span class="qn-icon">👤</span> Personal Info <span class="qn-arrow">›</span></button>
+      <button class="qn-item" onclick="profSwitchSection('financial',this)"><span class="qn-icon">💼</span> Financial Profile <span class="qn-arrow">›</span></button>
+      <button class="qn-item" onclick="profSwitchSection('bank',this)"><span class="qn-icon">🏦</span> Bank Accounts <span class="qn-arrow">›</span></button>
+      <button class="qn-item" onclick="profSwitchSection('kyc',this)"><span class="qn-icon">📋</span> KYC & Documents <span class="qn-arrow">›</span></button>
+      <div class="qnav-section">Preferences</div>
+      <button class="qn-item" onclick="profSwitchSection('preferences',this)"><span class="qn-icon">🎯</span> Investment Prefs <span class="qn-arrow">›</span></button>
+      <button class="qn-item" onclick="profSwitchSection('notifications',this)"><span class="qn-icon">🔔</span> Notifications <span class="qn-arrow">›</span></button>
+      <div class="qnav-section">Account</div>
+      <button class="qn-item" onclick="profSwitchSection('security',this)"><span class="qn-icon">🔒</span> Security <span class="qn-arrow">›</span></button>
+      <button class="qn-item" onclick="profSwitchSection('referral',this)"><span class="qn-icon">🎁</span> Refer & Earn <span class="qn-arrow">›</span></button>
+      <button class="qn-item" onclick="profSwitchSection('activity',this)"><span class="qn-icon">📊</span> Activity Log <span class="qn-arrow">›</span></button>
+    </div>
+
+    <div class="kyc-card">
+      <div class="kyc-title">Profile Completeness <span class="kyc-pct">80%</span></div>
+      <div class="kyc-bar"><div class="kyc-fill"></div></div>
+      <div class="kyc-steps">
+        <div class="kyc-step"><span class="ks-dot ks-done">✓</span> Personal info verified</div>
+        <div class="kyc-step"><span class="ks-dot ks-done">✓</span> PAN card uploaded</div>
+        <div class="kyc-step"><span class="ks-dot ks-done">✓</span> Bank account linked</div>
+        <div class="kyc-step"><span class="ks-dot ks-pending">!</span> ITR pending upload</div>
+        <div class="kyc-step"><span class="ks-dot ks-miss">✕</span> Accreditation letter</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- RIGHT CONTENT -->
+  <div class="right-content">
+
+    <!-- ── PERSONAL INFO ── -->
+    <div class="prof-section active" id="prof-sec-personal">
+      <div class="sh">
+        <div><h2>Personal Information</h2><p>Your basic profile information</p></div>
+        <span style="font-size:.72rem;color:var(--em);background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);padding:.25rem .65rem;border-radius:6px;font-weight:600">✓ Identity Verified</span>
+      </div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">👤</span> Basic Details</span><button class="btn-ghost" onclick="profToggleEdit('profBasicForm')">✏️ Edit</button></div>
+        <div class="form-grid" id="profBasicForm">
+          <div class="field"><label>First Name</label><input type="text" id="profFirstName" value="Rahul" disabled></div>
+          <div class="field"><label>Last Name</label><input type="text" id="profLastName" value="Kumar" disabled></div>
+          <div class="field"><label>Email Address</label><input type="email" id="profEmail" value="rahul.kumar@email.com" disabled><div class="input-note">✓ Email verified</div></div>
+          <div class="field"><label>Phone Number</label><input type="tel" id="profPhone" value="+91 98765 43210" disabled><div class="input-note">✓ Phone verified</div></div>
+          <div class="field"><label>Date of Birth</label><input type="date" id="profDob" value="1990-03-15" disabled></div>
+          <div class="field"><label>Gender</label><select id="profGender" disabled><option selected>Male</option><option>Female</option><option>Prefer not to say</option></select></div>
+          <div class="field"><label>Nationality</label><input type="text" id="profNationality" value="Indian" disabled></div>
+          <div class="field"><label>Country of Residence</label><select id="profCountry" disabled><option selected>India</option><option>United States</option><option>United Kingdom</option><option>UAE</option><option>Singapore</option></select></div>
+        </div>
+      </div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">📍</span> Address Details</span><button class="btn-ghost" onclick="profToggleEdit('profAddrForm')">✏️ Edit</button></div>
+        <div class="form-grid" id="profAddrForm">
+          <div class="field full"><label>Street Address</label><input type="text" id="profAddr" value="42B, Bandra West" disabled></div>
+          <div class="field"><label>City</label><input type="text" id="profCity" value="Mumbai" disabled></div>
+          <div class="field"><label>State</label><input type="text" id="profState" value="Maharashtra" disabled></div>
+          <div class="field"><label>PIN / ZIP Code</label><input type="text" id="profPin" value="400050" disabled></div>
+          <div class="field"><label>Country</label><input type="text" id="profAddrCountry" value="India" disabled></div>
+        </div>
+      </div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">💬</span> Bio & Social Links</span></div>
+        <div class="form-grid g1">
+          <div class="field"><label>Short Bio</label><textarea id="profBio" rows="3">Real estate enthusiast and tech entrepreneur. Investing since 2020. Focused on commercial assets in emerging markets.</textarea></div>
+          <div class="field"><label>LinkedIn</label><input type="url" id="profLinkedin" value="https://linkedin.com/in/rahulkumar"></div>
+          <div class="field"><label>Twitter / X</label><input type="text" id="profTwitter" value="@rahulkumar_re"></div>
+        </div>
+      </div>
+      <div class="save-bar"><button class="btn-ghost">Discard</button><button class="btn-em" onclick="profSaveProfile()">💾 Save Changes</button></div>
+    </div>
+
+    <!-- ── FINANCIAL PROFILE ── -->
+    <div class="prof-section" id="prof-sec-financial">
+      <div class="sh"><div><h2>Financial Profile</h2><p>Investment background and financial details</p></div></div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">💰</span> Income & Net Worth</span></div>
+        <div class="form-grid">
+          <div class="field"><label>Annual Income Range</label><select><option>₹50L – ₹1Cr ($60K–$120K)</option><option>₹1Cr – ₹5Cr ($120K–$600K)</option><option>₹5Cr+ ($600K+)</option></select></div>
+          <div class="field"><label>Net Worth Range</label><select><option>$500K – $1M</option><option selected>$1M – $5M</option><option>$5M+</option></select></div>
+          <div class="field"><label>Occupation</label><select><option selected>Entrepreneur / Business Owner</option><option>Salaried Professional</option><option>Investor / HNI</option><option>Doctor / Lawyer</option><option>Other</option></select></div>
+          <div class="field"><label>Source of Funds</label><select><option selected>Business Income</option><option>Salary</option><option>Inheritance</option><option>Investment Returns</option><option>Other</option></select></div>
+          <div class="field"><label>PAN / Tax ID</label><input type="text" value="ABCPK1234D" disabled></div>
+          <div class="field"><label>Accredited Investor Status</label><select><option selected>Yes – Income-based</option><option>Yes – Net worth-based</option><option>No</option></select></div>
+        </div>
+      </div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">📊</span> Investment Experience</span></div>
+        <div class="form-grid">
+          <div class="field"><label>Years of Investment Experience</label><select><option>Less than 1 year</option><option>1–3 years</option><option selected>3–7 years</option><option>7+ years</option></select></div>
+          <div class="field"><label>Prior Real Estate Investment</label><select><option selected>Yes, significant experience</option><option>Yes, some experience</option><option>No prior experience</option></select></div>
+          <div class="field"><label>Risk Tolerance</label><select><option>Conservative (Low Risk)</option><option selected>Moderate (Balanced)</option><option>Aggressive (High Growth)</option></select></div>
+          <div class="field"><label>Investment Horizon</label><select><option>Less than 2 years</option><option selected>3–7 years</option><option>7+ years</option></select></div>
+        </div>
+      </div>
+      <div class="save-bar"><button class="btn-ghost">Discard</button><button class="btn-em" onclick="profSaveProfile()">💾 Save Changes</button></div>
+    </div>
+
+    <!-- ── BANK ACCOUNTS ── -->
+    <div class="prof-section" id="prof-sec-bank">
+      <div class="sh"><div><h2>Bank Accounts</h2><p>Linked accounts for deposits and withdrawals</p></div><button class="btn-em" onclick="profShowToast('Opening bank linking flow...','info')">+ Add Account</button></div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">🏦</span> Linked Accounts</span></div>
+        <div class="bank-card"><div class="bank-logo">🏦</div><div class="bank-info"><strong>HDFC Bank</strong><span>Savings Account · ••••  ••••  4521 · IFSC: HDFC0001234</span></div><span class="bank-status verified">✓ Verified · Primary</span></div>
+        <div class="bank-card" style="margin-top:.6rem"><div class="bank-logo" style="background:linear-gradient(135deg,#166534,#16a34a)">🌿</div><div class="bank-info"><strong>State Bank of India</strong><span>Savings Account · ••••  ••••  9087 · IFSC: SBIN0004567</span></div><span class="bank-status pending">⏳ Verification Pending</span></div>
+        <button class="add-bank-btn" onclick="profShowToast('Bank linking modal coming soon!','info')">+ Add New Bank Account</button>
+      </div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">💸</span> Wallet Balance</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
+          <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center"><div style="font-size:.7rem;color:var(--dim);margin-bottom:.3rem">AVAILABLE</div><div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--em)">$2,450</div></div>
+          <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center"><div style="font-size:.7rem;color:var(--dim);margin-bottom:.3rem">IN TRANSIT</div><div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800">$312</div></div>
+          <div style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center"><div style="font-size:.7rem;color:var(--dim);margin-bottom:.3rem">PENDING</div><div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--amber)">$0</div></div>
+        </div>
+        <div style="display:flex;gap:.6rem;margin-top:1rem"><button class="btn-em" style="flex:1" onclick="profShowToast('Deposit flow opening...','info')">⬆ Deposit</button><button class="btn-ghost" style="flex:1" onclick="profShowToast('Withdrawal flow opening...','info')">⬇ Withdraw</button></div>
+      </div>
+    </div>
+
+    <!-- ── KYC DOCUMENTS ── -->
+    <div class="prof-section" id="prof-sec-kyc">
+      <div class="sh"><div><h2>KYC & Documents</h2><p>Identity verification and compliance documents</p></div><span style="font-size:.72rem;background:rgba(16,185,129,.1);color:var(--em);border:1px solid rgba(16,185,129,.2);padding:.3rem .75rem;border-radius:6px;font-weight:700">80% Complete</span></div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">🪪</span> Identity Documents</span></div>
+        <div class="doc-row"><div class="doc-icon done">🪪</div><div class="doc-info"><strong>PAN Card</strong><span>Uploaded Jan 15, 2024 · ABCPK1234D</span></div><span class="doc-status ds-done">✓ Verified</span><button class="doc-upload-btn" onclick="profShowToast('Opening document viewer...','info')">View</button></div>
+        <div class="doc-row"><div class="doc-icon done">📘</div><div class="doc-info"><strong>Aadhaar Card</strong><span>Uploaded Jan 15, 2024 · Masked copy</span></div><span class="doc-status ds-done">✓ Verified</span><button class="doc-upload-btn" onclick="profShowToast('Opening document viewer...','info')">View</button></div>
+        <div class="doc-row"><div class="doc-icon done">🛂</div><div class="doc-info"><strong>Passport</strong><span>Uploaded Feb 1, 2024 · Exp: 2030</span></div><span class="doc-status ds-done">✓ Verified</span><button class="doc-upload-btn">View</button></div>
+      </div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">📋</span> Financial Documents</span></div>
+        <div class="doc-row"><div class="doc-icon done">🏦</div><div class="doc-info"><strong>Bank Statement (6 months)</strong><span>Uploaded Jan 20, 2024 · HDFC ••4521</span></div><span class="doc-status ds-done">✓ Accepted</span><button class="doc-upload-btn" onclick="profShowToast('Opening document viewer...','info')">View</button></div>
+        <div class="doc-row"><div class="doc-icon pending">📊</div><div class="doc-info"><strong>Income Tax Return (FY 2023–24)</strong><span>Upload required for accreditation renewal</span></div><span class="doc-status ds-pending">⏳ Pending</span><button class="doc-upload-btn" onclick="profShowToast('Upload modal opening...','info')">Upload</button></div>
+        <div class="doc-row"><div class="doc-icon missing">📜</div><div class="doc-info"><strong>Accredited Investor Certificate</strong><span>CA certificate required for high-value deals</span></div><span class="doc-status ds-missing">✕ Missing</span><button class="doc-upload-btn" onclick="profShowToast('Upload modal opening...','info')">Upload</button></div>
+      </div>
+    </div>
+
+    <!-- ── INVESTMENT PREFERENCES ── -->
+    <div class="prof-section" id="prof-sec-preferences">
+      <div class="sh"><div><h2>Investment Preferences</h2><p>Customize your InvestR experience</p></div></div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">🏠</span> Preferred Asset Types</span></div>
+        <div class="pref-grid">
+          <div class="pref-card active" onclick="this.classList.toggle('active')"><span class="pc-icon">🏢</span><div class="pc-name">Commercial</div><div class="pc-desc">Office · Retail · Mixed-use</div></div>
+          <div class="pref-card" onclick="this.classList.toggle('active')"><span class="pc-icon">🏡</span><div class="pc-name">Residential</div><div class="pc-desc">Apartments · Villas</div></div>
+          <div class="pref-card active" onclick="this.classList.toggle('active')"><span class="pc-icon">🏭</span><div class="pc-name">Industrial</div><div class="pc-desc">Warehouses · Logistics</div></div>
+          <div class="pref-card" onclick="this.classList.toggle('active')"><span class="pc-icon">🏨</span><div class="pc-name">Hospitality</div><div class="pc-desc">Hotels · Resorts</div></div>
+        </div>
+      </div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">🌍</span> Preferred Geographies</span></div>
+        <div class="pref-grid">
+          <div class="pref-card active" onclick="this.classList.toggle('active')"><span class="pc-icon">🇮🇳</span><div class="pc-name">India</div><div class="pc-desc">Mumbai · Bengaluru · Hyderabad</div></div>
+          <div class="pref-card active" onclick="this.classList.toggle('active')"><span class="pc-icon">🇦🇪</span><div class="pc-name">UAE</div><div class="pc-desc">Dubai · Abu Dhabi</div></div>
+          <div class="pref-card" onclick="this.classList.toggle('active')"><span class="pc-icon">🇺🇸</span><div class="pc-name">USA</div><div class="pc-desc">Austin · Miami · NYC</div></div>
+          <div class="pref-card" onclick="this.classList.toggle('active')"><span class="pc-icon">🇬🇧</span><div class="pc-name">UK / Europe</div><div class="pc-desc">London · Paris · Berlin</div></div>
+        </div>
+      </div>
+      <div class="save-bar"><button class="btn-ghost">Reset Defaults</button><button class="btn-em" onclick="profSaveProfile()">💾 Save Preferences</button></div>
+    </div>
+
+    <!-- ── NOTIFICATIONS ── -->
+    <div class="prof-section" id="prof-sec-notifications">
+      <div class="sh"><div><h2>Notification Settings</h2><p>Control how and when InvestR reaches you</p></div></div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">📧</span> Email Notifications</span></div>
+        <div class="toggle-row"><div class="toggle-info"><strong>Dividend Received</strong><span>When a distribution hits your account</span></div><label class="toggle"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="toggle-row"><div class="toggle-info"><strong>New Property Listed</strong><span>Properties matching your preferences</span></div><label class="toggle"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="toggle-row"><div class="toggle-info"><strong>Investment Confirmed</strong><span>When your purchase is processed</span></div><label class="toggle"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="toggle-row"><div class="toggle-info"><strong>Monthly Portfolio Report</strong><span>Summary of performance each month</span></div><label class="toggle"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="toggle-row"><div class="toggle-info"><strong>Listing Nearly Full</strong><span>Properties you watchlisted are 90%+ funded</span></div><label class="toggle"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="toggle-row"><div class="toggle-info"><strong>Marketing & Newsletters</strong><span>Market insights and platform news</span></div><label class="toggle"><input type="checkbox"><span class="slider"></span></label></div>
+      </div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">📱</span> Push & SMS Notifications</span></div>
+        <div class="toggle-row"><div class="toggle-info"><strong>Dividend Credited</strong><span>Instant push when dividends are paid</span></div><label class="toggle"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="toggle-row"><div class="toggle-info"><strong>Trade Executed</strong><span>Buy/sell confirmations via SMS</span></div><label class="toggle"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="toggle-row"><div class="toggle-info"><strong>Security Alerts</strong><span>New login and suspicious activity</span></div><label class="toggle"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="toggle-row"><div class="toggle-info"><strong>Price Milestones</strong><span>When your portfolio crosses key thresholds</span></div><label class="toggle"><input type="checkbox"><span class="slider"></span></label></div>
+      </div>
+    </div>
+
+    <!-- ── SECURITY ── -->
+    <div class="prof-section" id="prof-sec-security">
+      <div class="sh"><div><h2>Security Settings</h2><p>Protect your account and investments</p></div></div>
+      <div class="prof-card">
+        <div class="card-header"><span class="card-title"><span class="ct-icon">🔐</span> Authentication</span></div>
+        <div class="sec-item"><div class="si-left"><span class="si-icon">🔑</span><div class="si-info"><strong>Password</strong><span>Last changed 3 months ago</span></div></div><span class="si-status active">Strong</span><button class="si-btn" onclick="document.getElementById('profPwModal').classList.add('open')">Change</button></div>
+        <div class="sec-item"><div class="si-left"><span class="si-icon">📱</span><div class="si-info"><strong>Two-Factor Authentication (2FA)</strong><span>Google Authenticator · +91 987•• ••210</span></div></div><span class="si-status active">● Enabled</span><button class="si-btn" onclick="profShowToast('2FA settings opening...','info')">Manage</button></div>
+        <div class="sec-item"><div class="si-left"><span class="si-icon">🛡️</span><div class="si-info"><strong>Biometric Login</strong><span>Face ID / Fingerprint for mobile app</span></div></div><span class="si-status inactive">○ Inactive</span><button class="si-btn" onclick="profShowToast('Enable biometric in the mobile app','info')">Enable</button></div>
+        <div class="sec-item"><div class="si-left"><span class="si-icon">🔔</span><div class="si-info"><strong>Login Notifications</strong><span>Email alert for new sign-ins</span></div></div><label class="toggle"><input type="checkbox" checked><span class="slider"></span></label></div>
+      </div>
+      <div class="prof-card" style="border-color:rgba(239,68,68,.15)">
+        <div class="card-header"><span class="card-title" style="color:var(--red)"><span class="ct-icon">⚠️</span> Danger Zone</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;padding:.5rem 0"><div><div style="font-weight:600;margin-bottom:.2rem">Freeze Account</div><div style="font-size:.8rem;color:var(--dim)">Temporarily suspend all trading activity</div></div><button style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--red);padding:.5rem 1rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer" onclick="profShowToast('Account freeze requires phone verification','info')">Freeze Account</button></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;padding:.5rem 0;border-top:1px solid rgba(255,255,255,.04)"><div><div style="font-weight:600;margin-bottom:.2rem">Delete Account</div><div style="font-size:.8rem;color:var(--dim)">Permanently close your InvestR account</div></div><button style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--red);padding:.5rem 1rem;border-radius:var(--r);font-family:'Syne',sans-serif;font-weight:600;font-size:.8rem;cursor:pointer" onclick="profShowToast('Please contact support to delete your account','error')">Delete Account</button></div>
+      </div>
+    </div>
+
+    <!-- ── REFERRAL ── -->
+    <div class="prof-section" id="prof-sec-referral">
+      <div class="sh"><div><h2>Refer & Earn</h2><p>Invite friends and earn rewards</p></div></div>
+      <div class="ref-box">
+        <div style="font-size:1.1rem;font-weight:600;margin-bottom:.3rem">Your Referral Code</div>
+        <div style="font-size:.85rem;color:var(--dim)">Share and earn $25 when each friend invests $500+</div>
+        <div class="ref-code">RAHUL2024</div>
+        <div style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap">
+          <button class="btn-em" onclick="profCopyRef()">📋 Copy Code</button>
+          <button class="btn-ghost" onclick="profShowToast('Sharing link copied!','info')">🔗 Share Link</button>
+          <button class="btn-ghost" onclick="profShowToast('Opening WhatsApp...','info')">💬 WhatsApp</button>
+        </div>
+        <div class="ref-stats">
+          <div class="rs-item"><span class="rs-val" style="color:var(--em)">12</span><span class="rs-label">Referrals</span></div>
+          <div class="rs-item"><span class="rs-val" style="color:var(--amber)">$300</span><span class="rs-label">Earned</span></div>
+          <div class="rs-item"><span class="rs-val">8</span><span class="rs-label">Active Investors</span></div>
+        </div>
+      </div>
+      <div class="prof-card" style="margin-top:1.2rem">
+        <div class="card-header"><span class="card-title">Recent Referrals</span></div>
+        <div style="display:flex;flex-direction:column;gap:.5rem" id="profReferralList"></div>
+      </div>
+    </div>
+
+    <!-- ── ACTIVITY LOG ── -->
+    <div class="prof-section" id="prof-sec-activity">
+      <div class="sh"><div><h2>Activity Log</h2><p>Everything that's happened on your account</p></div><button class="btn-ghost" onclick="profShowToast('Exporting activity log...','info')">⬇ Export</button></div>
+      <div class="prof-card"><div class="activity-list" id="profActivityLog"></div></div>
+    </div>
+
+  </div><!-- /right-content -->
+</div><!-- /prof-page -->
+
+<!-- Modal for Change Password -->
+<div class="prof-modal-overlay" id="profPwModal">
+  <div class="prof-modal">
+    <button class="prof-modal-close" onclick="document.getElementById('profPwModal').classList.remove('open')">✕</button>
+    <h3 style="margin-bottom:1rem">Change Password</h3>
+    <div style="display:flex;flex-direction:column;gap:.9rem">
+      <div class="field"><label>Current Password</label><input type="password" placeholder="••••••••"></div>
+      <div class="field"><label>New Password</label><input type="password" placeholder="Min. 8 characters"></div>
+      <div class="field"><label>Confirm New Password</label><input type="password" placeholder="Repeat new password"></div>
+      <button class="btn-em" onclick="document.getElementById('profPwModal').classList.remove('open');profShowToast('Password updated!','success')" style="width:100%;padding:.8rem">Update Password</button>
+    </div>
+  </div>
+</div>
+
+<div class="prof-toast" id="profToast"></div>
+
+</div><!-- /page-profile -->
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  PAGE: LIST PROPERTY (list-property.html — unchanged)     -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="page-list" class="app-page">
+
+<div class="list-scene"><div class="lorb lo1"></div><div class="lorb lo2"></div></div>
+
+<!-- NAV -->
+<nav class="list-nav">
+  <div class="list-logo">Invest<span>R</span></div>
+  <div class="nav-bc">
+    <a onclick="navigateTo('home')">Home</a><span>›</span>
+    <span class="cur">List Your Property</span>
+  </div>
+  <div style="display:flex;gap:.6rem">
+    <button class="btn-nav">Save Draft</button>
+    <button class="btn-em">Get Help</button>
+  </div>
+</nav>
+
+<!-- PROGRESS BAR -->
+<div class="prog-bar"><div class="prog-fill" id="listProgFill" style="width:20%"></div></div>
+
+<!-- HERO -->
+<div class="list-hero">
+  <div class="hero-badge">PROPERTY OWNER PORTAL</div>
+  <h1>List Your Property on <span class="gt">InvestR</span></h1>
+  <p>Connect your real estate to thousands of investors. Our team verifies every listing — expect a response within 5–7 business days.</p>
+  <div class="steps-row" id="listStepsRow">
+    <div class="step-pill active" data-step="1"><span class="sn">1</span> Property Type</div>
+    <div class="step-pill" data-step="2"><span class="sn">2</span> Details</div>
+    <div class="step-pill" data-step="3"><span class="sn">3</span> Financials</div>
+    <div class="step-pill" data-step="4"><span class="sn">4</span> Documents</div>
+    <div class="step-pill" data-step="5"><span class="sn">5</span> Review & Submit</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="list-main">
+
+  <!-- STEP 1: Property Type -->
+  <div class="form-sec active-sec" id="listSec1">
+    <div class="sec-head"><div class="sec-num">1</div><div><h2>What type of property are you listing?</h2><p>Choose the category that best describes your asset</p></div></div>
+    <div class="type-grid" id="listTypeGrid">
+      <div class="type-card sel" data-type="commercial"><span class="ti">🏢</span><div class="tl">Commercial</div><div class="ts">Office · Retail · Mixed-Use</div></div>
+      <div class="type-card" data-type="residential"><span class="ti">🏡</span><div class="tl">Residential</div><div class="ts">Apartments · Villas · Condos</div></div>
+      <div class="type-card" data-type="industrial"><span class="ti">🏭</span><div class="tl">Industrial</div><div class="ts">Warehouses · Logistics · Factories</div></div>
+      <div class="type-card" data-type="land"><span class="ti">🌿</span><div class="tl">Land / Plot</div><div class="ts">Development · Agricultural</div></div>
+      <div class="type-card" data-type="hospitality"><span class="ti">🏨</span><div class="tl">Hospitality</div><div class="ts">Hotels · Resorts · Serviced</div></div>
+      <div class="type-card" data-type="healthcare"><span class="ti">🏥</span><div class="tl">Healthcare</div><div class="ts">Clinics · Care Homes</div></div>
+      <div class="type-card" data-type="retail"><span class="ti">🛍️</span><div class="tl">Retail</div><div class="ts">Malls · Showrooms · Shops</div></div>
+      <div class="type-card" data-type="other"><span class="ti">🔑</span><div class="tl">Other</div><div class="ts">Unique / Special Assets</div></div>
+    </div>
+    <div style="margin-top:1.5rem">
+      <div class="form-grid g3">
+        <div class="field"><label>Property Name *</label><input type="text" id="listPropName" placeholder="e.g. Azure Heights Tower"></div>
+        <div class="field"><label>Country *</label><select id="listPropCountry"><option value="">Select country</option><option>India</option><option>United States</option><option>United Kingdom</option><option>UAE</option><option>Singapore</option><option>Germany</option><option>France</option><option>Australia</option><option>Canada</option><option>Other</option></select></div>
+        <div class="field"><label>City *</label><input type="text" id="listPropCity" placeholder="e.g. Mumbai"></div>
+        <div class="field full"><label>Full Address *</label><input type="text" id="listPropAddr" placeholder="Street address, building name, pin code"></div>
+      </div>
+    </div>
+    <div class="nav-btns"><span class="step-hint">Step 1 of 5</span><button class="btn-next" onclick="listGoToStep(2)">Continue <span>→</span></button></div>
+  </div>
+
+  <!-- STEP 2: Property Details -->
+  <div class="form-sec" id="listSec2">
+    <div class="sec-head"><div class="sec-num">2</div><div><h2>Property Details</h2><p>Tell investors everything they need to know about the asset</p></div></div>
+    <div class="form-grid" style="margin-bottom:1.1rem">
+      <div class="field"><label>Total Area *</label><div class="input-prefix"><span>sq ft</span><input type="number" id="listArea" placeholder="e.g. 50000" style="padding-left:3.5rem"></div></div>
+      <div class="field"><label>Year Built / Completed *</label><input type="number" id="listYearBuilt" placeholder="e.g. 2018" min="1900" max="2025"></div>
+      <div class="field"><label>Number of Floors</label><input type="number" id="listFloors" placeholder="e.g. 12"></div>
+      <div class="field"><label>Total Units / Offices</label><input type="number" id="listUnits" placeholder="e.g. 48"></div>
+      <div class="field"><label>Current Occupancy Rate *</label><div class="input-prefix"><span>%</span><input type="number" id="listOccupancy" placeholder="e.g. 92" min="0" max="100" style="padding-left:2rem"></div></div>
+      <div class="field"><label>Parking Spaces</label><input type="number" id="listParking" placeholder="e.g. 200"></div>
+    </div>
+    <div class="form-grid g1" style="margin-bottom:1.1rem">
+      <div class="field"><label>Property Description *</label><textarea id="listDesc" placeholder="Describe the property — location advantages, key features, tenant profile..." style="min-height:130px"></textarea><div class="field-hint">Minimum 100 words. Clear, factual descriptions perform best.</div></div>
+    </div>
+    <div class="form-grid">
+      <div class="field"><label>Building Certification</label><select id="listCert"><option value="">None</option><option>LEED Platinum</option><option>LEED Gold</option><option>LEED Silver</option><option>BREEAM Outstanding</option><option>BREEAM Excellent</option><option>Green Star</option><option>IGBC Green</option><option>GRIHA</option><option>Other</option></select></div>
+      <div class="field"><label>Lease Type</label><select id="listLeaseType"><option value="">Select type</option><option>Triple Net (NNN)</option><option>Gross Lease</option><option>Modified Gross</option><option>Double Net (NN)</option><option>Percentage Lease</option><option>No Lease (Vacant)</option></select></div>
+      <div class="field"><label>Primary Tenant (if any)</label><input type="text" id="listTenant" placeholder="e.g. Infosys, HDFC Bank"></div>
+      <div class="field"><label>Lease Expiry</label><input type="month" id="listLeaseExpiry"></div>
+    </div>
+    <div style="margin-top:1.2rem">
+      <div class="sec-head" style="margin-bottom:1rem"><div><h2 style="font-size:1rem">Property Photos</h2><p>Upload high-quality images (min. 5 recommended)</p></div></div>
+      <div class="upload-zone" id="listPhotoZone" ondragover="listDragOver(event,'listPhotoZone')" ondragleave="listDragLeave('listPhotoZone')" ondrop="listDropFiles(event,'listPhotoZone','photos')">
+        <input type="file" multiple accept="image/*" onchange="listHandleFiles(this,'photos')">
+        <span class="upload-icon">🖼️</span>
+        <h4>Drop photos here or click to browse</h4>
+        <p>Exterior, interior, floor plans, amenities</p>
+        <div class="accepted">JPG, PNG, WEBP · Max 10MB per file</div>
+      </div>
+      <div class="uploaded-files" id="list-photos-preview"></div>
+    </div>
+    <div class="nav-btns"><button class="btn-back" onclick="listGoToStep(1)">← Back</button><button class="btn-next" onclick="listGoToStep(3)">Continue <span>→</span></button></div>
+  </div>
+
+  <!-- STEP 3: Financials -->
+  <div class="form-sec" id="listSec3">
+    <div class="sec-head"><div class="sec-num">3</div><div><h2>Financial Information</h2><p>Our team uses this to assess investment viability and set offering parameters</p></div></div>
+    <div class="form-grid">
+      <div class="field"><label>Asking / Valuation Price *</label><div class="input-prefix"><span>$</span><input type="number" id="listAskPrice" placeholder="e.g. 4200000" style="padding-left:1.8rem"></div><div class="field-hint">Provide a realistic market valuation</div></div>
+      <div class="field"><label>Minimum Investment (per share) *</label><div class="input-prefix"><span>$</span><input type="number" id="listMinInvest" placeholder="e.g. 500" style="padding-left:1.8rem"></div></div>
+      <div class="field"><label>Gross Annual Rental Income *</label><div class="input-prefix"><span>$</span><input type="number" id="listGrossRent" placeholder="e.g. 512000" style="padding-left:1.8rem" oninput="listCalcNOI()"></div></div>
+      <div class="field"><label>Annual Operating Expenses *</label><div class="input-prefix"><span>$</span><input type="number" id="listOpEx" placeholder="e.g. 168000" style="padding-left:1.8rem" oninput="listCalcNOI()"></div></div>
+      <div class="field"><label>Net Operating Income (NOI)</label><div class="input-prefix"><span>$</span><input type="number" id="listNoi" placeholder="Auto-calculated" style="padding-left:1.8rem;background:rgba(16,185,129,.05);border-color:rgba(16,185,129,.2)" readonly></div></div>
+      <div class="field"><label>Existing Mortgage / Debt</label><div class="input-prefix"><span>$</span><input type="number" id="listDebt" placeholder="e.g. 1800000 (0 if none)" style="padding-left:1.8rem"></div></div>
+      <div class="field"><label>Target ROI for Investors *</label><div class="input-prefix"><span>%</span><input type="number" id="listTargetROI" placeholder="e.g. 12.5" step="0.1" style="padding-left:2rem"></div></div>
+      <div class="field"><label>Investment Term *</label><select id="listTerm"><option value="">Select term</option><option>3 Years</option><option>5 Years</option><option>7 Years</option><option>10 Years</option><option>15 Years</option><option>Open-ended</option></select></div>
+      <div class="field"><label>Distribution Frequency *</label><select id="listDistrib"><option value="">Select</option><option>Monthly</option><option>Quarterly</option><option>Semi-Annual</option><option>Annual</option></select></div>
+      <div class="field"><label>Exit Strategy</label><select id="listExit"><option value="">Select</option><option>Asset Sale at Term End</option><option>Refinancing</option><option>IPO / REIT Conversion</option><option>Buy-back by Owner</option><option>Open Marketplace</option></select></div>
+    </div>
+    <div class="form-grid g1" style="margin-top:1rem"><div class="field"><label>Additional Financial Notes</label><textarea id="listFinNotes" placeholder="Recent rent reviews, upcoming lease renewals, planned capital expenditure..."></textarea></div></div>
+    <div class="nav-btns"><button class="btn-back" onclick="listGoToStep(2)">← Back</button><button class="btn-next" onclick="listGoToStep(4)">Continue <span>→</span></button></div>
+  </div>
+
+  <!-- STEP 4: Documents -->
+  <div class="form-sec" id="listSec4">
+    <div class="sec-head"><div class="sec-num">4</div><div><h2>Documents & Verification</h2><p>Upload required documents for our due diligence team</p></div></div>
+    <div class="doc-check" id="listDocChecklist">
+      <div class="dc-item" onclick="listToggleDoc(this,'titleDeed')"><div class="dc-cb" id="listcb-titleDeed"></div><div class="dc-info"><strong>Title Deed / Ownership Proof</strong><span>Original or certified copy of ownership document</span></div><span class="dc-req req">Required</span></div>
+      <div class="dc-item" onclick="listToggleDoc(this,'govtId')"><div class="dc-cb" id="listcb-govtId"></div><div class="dc-info"><strong>Owner Government ID</strong><span>Passport, Aadhaar, or national ID</span></div><span class="dc-req req">Required</span></div>
+      <div class="dc-item" onclick="listToggleDoc(this,'taxReturn')"><div class="dc-cb" id="listcb-taxReturn"></div><div class="dc-info"><strong>Last 3 Years Tax Returns / ITR</strong><span>Property and personal income tax returns</span></div><span class="dc-req req">Required</span></div>
+      <div class="dc-item" onclick="listToggleDoc(this,'leaseAgree')"><div class="dc-cb" id="listcb-leaseAgree"></div><div class="dc-info"><strong>Lease Agreements</strong><span>All active lease contracts (can be redacted)</span></div><span class="dc-req req">Required</span></div>
+      <div class="dc-item" onclick="listToggleDoc(this,'appraisal')"><div class="dc-cb" id="listcb-appraisal"></div><div class="dc-info"><strong>Independent Valuation / Appraisal Report</strong><span>Not older than 12 months preferred</span></div><span class="dc-req opt">Recommended</span></div>
+      <div class="dc-item" onclick="listToggleDoc(this,'insurance')"><div class="dc-cb" id="listcb-insurance"></div><div class="dc-info"><strong>Insurance Certificate</strong><span>Current property insurance policy</span></div><span class="dc-req opt">Recommended</span></div>
+      <div class="dc-item" onclick="listToggleDoc(this,'buildingPlan')"><div class="dc-cb" id="listcb-buildingPlan"></div><div class="dc-info"><strong>Approved Building Plans / Layout</strong><span>Municipal approved drawings or floor plans</span></div><span class="dc-req opt">Optional</span></div>
+      <div class="dc-item" onclick="listToggleDoc(this,'envReport')"><div class="dc-cb" id="listcb-envReport"></div><div class="dc-info"><strong>Environmental Assessment Report</strong><span>Phase I or Phase II ESA if available</span></div><span class="dc-req opt">Optional</span></div>
+    </div>
+    <div style="margin-top:1.5rem">
+      <div class="sec-head" style="margin-bottom:1rem"><div><h2 style="font-size:1rem">Upload All Documents</h2><p>PDF or image format, max 25MB per file</p></div></div>
+      <div class="upload-zone" id="listDocZone" ondragover="listDragOver(event,'listDocZone')" ondragleave="listDragLeave('listDocZone')" ondrop="listDropFiles(event,'listDocZone','docs')">
+        <input type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onchange="listHandleFiles(this,'docs')">
+        <span class="upload-icon">📁</span>
+        <h4>Drop documents here or click to browse</h4>
+        <p>PDF, JPG, PNG, DOC supported</p>
+        <div class="accepted">Max 25MB per file · All uploads are encrypted and confidential</div>
+      </div>
+      <div class="uploaded-files" id="list-docs-preview"></div>
+    </div>
+    <div style="margin-top:1.5rem">
+      <div class="sec-head" style="margin-bottom:1rem"><div><h2 style="font-size:1rem">Owner / Sponsor Information</h2></div></div>
+      <div class="form-grid">
+        <div class="field"><label>Full Legal Name *</label><input type="text" id="listOwnerName" placeholder="As per government ID"></div>
+        <div class="field"><label>Company / Entity Name</label><input type="text" id="listCompanyName" placeholder="If listing under a company"></div>
+        <div class="field"><label>Email Address *</label><input type="email" id="listOwnerEmail" placeholder="your@email.com"></div>
+        <div class="field"><label>Phone Number *</label><input type="tel" id="listOwnerPhone" placeholder="+91 98765 43210"></div>
+        <div class="field"><label>PAN / Tax ID</label><input type="text" id="listPanId" placeholder="For tax compliance"></div>
+        <div class="field"><label>LinkedIn Profile</label><input type="url" id="listLinkedin" placeholder="https://linkedin.com/in/..."></div>
+      </div>
+    </div>
+    <div class="nav-btns"><button class="btn-back" onclick="listGoToStep(3)">← Back</button><button class="btn-next" onclick="listGoToStep(5)">Continue <span>→</span></button></div>
+  </div>
+
+  <!-- STEP 5: Review & Submit -->
+  <div class="form-sec" id="listSec5">
+    <div class="sec-head"><div class="sec-num">5</div><div><h2>Review & Submit</h2><p>Double-check your listing before sending to our verification team</p></div></div>
+    <div class="preview-card">
+      <h3>📋 Listing Summary</h3>
+      <div class="preview-grid" id="listPreviewGrid">
+        <div class="pv-item"><div class="pv-l">Property Name</div><div class="pv-v" id="list-pv-name">—</div></div>
+        <div class="pv-item"><div class="pv-l">Type</div><div class="pv-v" id="list-pv-type">—</div></div>
+        <div class="pv-item"><div class="pv-l">Location</div><div class="pv-v" id="list-pv-loc">—</div></div>
+        <div class="pv-item"><div class="pv-l">Valuation</div><div class="pv-v" id="list-pv-val">—</div></div>
+        <div class="pv-item"><div class="pv-l">Target ROI</div><div class="pv-v" id="list-pv-roi" style="color:var(--em)">—</div></div>
+        <div class="pv-item"><div class="pv-l">Term</div><div class="pv-v" id="list-pv-term">—</div></div>
+        <div class="pv-item"><div class="pv-l">Occupancy</div><div class="pv-v" id="list-pv-occ">—</div></div>
+        <div class="pv-item"><div class="pv-l">Distribution</div><div class="pv-v" id="list-pv-dist">—</div></div>
+        <div class="pv-item"><div class="pv-l">Min. Investment</div><div class="pv-v" id="list-pv-min">—</div></div>
+      </div>
+    </div>
+    <div class="terms-box">
+      <strong>InvestR Listing Agreement — Key Terms</strong><br><br>
+      By submitting this listing, you ("Sponsor") agree to the following terms set forth by InvestR Inc.:<br><br>
+      1. <strong>Accuracy:</strong> All information submitted is accurate, complete, and not misleading. Any material changes must be reported immediately.<br><br>
+      2. <strong>Verification:</strong> InvestR reserves the right to conduct independent due diligence including property visits, background checks, and third-party appraisals at its sole discretion.<br><br>
+      3. <strong>Fees:</strong> InvestR charges a platform fee of 1.5% on capital raised plus a 10% performance fee on returns exceeding the 8% preferred investor return.<br><br>
+      4. <strong>Exclusivity:</strong> Once listed on InvestR, the Sponsor agrees to a 90-day exclusivity period during which the property cannot be listed on competing platforms.<br><br>
+      5. <strong>Compliance:</strong> The Sponsor is responsible for ensuring compliance with all local real estate, securities, and tax laws in the jurisdiction of the property.<br><br>
+      6. <strong>Rejection:</strong> InvestR may reject any listing for any reason, including but not limited to failed due diligence, legal encumbrances, or insufficient documentation.<br><br>
+      7. <strong>Data:</strong> Submitted information will be used strictly for the listing verification process and investor materials. InvestR's Privacy Policy applies in full.
+    </div>
+    <div class="check-row"><input type="checkbox" id="listAgreeTerms"><label for="listAgreeTerms">I have read and agree to the <a href="#">InvestR Listing Agreement</a> and <a href="#">Terms of Service</a></label></div>
+    <div class="check-row"><input type="checkbox" id="listAgreeAccuracy"><label for="listAgreeAccuracy">I confirm that all information and documents submitted are accurate to the best of my knowledge</label></div>
+    <div class="check-row"><input type="checkbox" id="listAgreeComply"><label for="listAgreeComply">I confirm I am the legal owner or authorized representative of this property</label></div>
+    <div class="check-row"><input type="checkbox" id="listAgreeContact"><label for="listAgreeContact">I consent to InvestR contacting me regarding this listing via email and phone</label></div>
+    <div class="nav-btns"><button class="btn-back" onclick="listGoToStep(4)">← Back</button><button class="btn-next" id="listSubmitBtn" onclick="listSubmitListing()">🚀 Submit for Verification</button></div>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="form-sec success-screen" id="listSuccessSec">
+    <div class="success-icon">🎉</div>
+    <h2>Listing Submitted!</h2>
+    <p>Your property has been received by the InvestR verification team. We'll review your submission and get back to you within <strong>5–7 business days</strong>.</p>
+    <div class="list-ref-box">
+      <div><div class="ref-label">Your Reference ID</div><div class="ref-id" id="listRefId">INV-2025-XXXX</div></div>
+      <button class="copy-btn" onclick="listCopyRef()">📋 Copy</button>
+    </div>
+    <div class="timeline-steps">
+      <div class="ts-item"><div class="ts-dot done">✓</div><div class="ts-info"><strong>Submission Received</strong><span>Your listing has been logged and assigned to a verification officer</span></div></div>
+      <div class="ts-item"><div class="ts-dot pending">2</div><div class="ts-info"><strong>Document Review (Days 1–3)</strong><span>Our team reviews all submitted documents and ownership records</span></div></div>
+      <div class="ts-item"><div class="ts-dot pending">3</div><div class="ts-info"><strong>Due Diligence Call (Days 3–5)</strong><span>A verification officer will schedule a call with you for clarifications</span></div></div>
+      <div class="ts-item"><div class="ts-dot pending">4</div><div class="ts-info"><strong>Final Approval (Days 5–7)</strong><span>Listing is approved, priced, and scheduled for launch on InvestR</span></div></div>
+      <div class="ts-item"><div class="ts-dot pending">5</div><div class="ts-info"><strong>Go Live 🚀</strong><span>Your property becomes visible to 48,000+ investors on InvestR</span></div></div>
+    </div>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <button class="btn-next" onclick="navigateTo('home')">← Back to Home</button>
+      <button class="btn-back" onclick="listShowToast('Email sent! Check your inbox.','success')">📧 Resend Confirmation</button>
+    </div>
+  </div>
+
+</div><!-- /list-main -->
+
+<div class="list-toast" id="listToast"></div>
+
+</div><!-- /page-list -->
+
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  SCRIPTS                                                  -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="script.js"></script>
+
+<script>
+// ══════════════════════════════════════════
+//  ROUTER
+// ══════════════════════════════════════════
+function navigateTo(page) {
+  document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+  // Init page if needed
+  if (page === 'portfolio') portInit();
+  if (page === 'profile') profInit();
+}
+
+// ══════════════════════════════════════════
+//  PORTFOLIO PAGE LOGIC
+// ══════════════════════════════════════════
+const portHoldings = [
+  { id:1, name:"Azure Heights Commercial", loc:"Austin, TX", cat:"Commercial", img:"https://images.unsplash.com/photo-1486325212027-8081e485255e?w=80&q=70", invested:5200, value:5850, roi:12.5, yield:8.2, shares:10, totalShares:840 },
+  { id:2, name:"Emerald Green Villas", loc:"London, UK", cat:"Residential", img:"https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=80&q=70", invested:3800, value:4120, roi:9.2, yield:5.8, shares:4, totalShares:600 },
+  { id:3, name:"Nova Logistics Hub", loc:"Dubai, UAE", cat:"Industrial", img:"https://images.unsplash.com/photo-1553877522-43269d4ea984?w=80&q=70", invested:7500, value:8625, roi:14.8, yield:10.1, shares:3, totalShares:480 },
+  { id:4, name:"Pacific View Residences", loc:"Singapore", cat:"Residential", img:"https://images.unsplash.com/photo-1567684014761-b65e2e59b9eb?w=80&q=70", invested:2100, value:2310, roi:10.4, yield:7.1, shares:2, totalShares:420 },
+  { id:5, name:"Riviera Business Park", loc:"Paris, France", cat:"Commercial", img:"https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=80&q=70", invested:3000, value:3360, roi:11.2, yield:7.8, shares:2, totalShares:630 },
+  { id:6, name:"GreenTech Industrial", loc:"Frankfurt, Germany", cat:"Industrial", img:"https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=80&q=70", invested:1500, value:1620, roi:13.7, yield:9.4, shares:1, totalShares:506 },
+  { id:7, name:"Marina Bay Towers", loc:"Mumbai, India", cat:"Commercial", img:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=80&q=70", invested:1400, value:1548, roi:10.8, yield:7.6, shares:1, totalShares:700 },
+];
+const portMarketProps = [
+  { id:1, name:"Skyline Plaza", loc:"New York, US", cat:"commercial", roi:"15.2%", funded:34, min:"$1,000", img:"https://images.unsplash.com/photo-1499092346589-b9b6be3e94b2?w=400&q=75", new:true },
+  { id:2, name:"Sunset Villas Goa", loc:"Goa, India", cat:"residential", roi:"11.8%", funded:58, min:"$500", img:"https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=400&q=75", new:false },
+  { id:3, name:"Rhine Industrial Park", loc:"Düsseldorf, Germany", cat:"industrial", roi:"13.4%", funded:21, min:"$2,000", img:"https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=75", new:true },
+  { id:4, name:"Tokyo Office Hub", loc:"Tokyo, Japan", cat:"commercial", roi:"12.1%", funded:67, min:"$1,500", img:"https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=400&q=75", new:false },
+  { id:5, name:"Palm Residences", loc:"Miami, FL", cat:"residential", roi:"9.8%", funded:45, min:"$800", img:"https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&q=75", new:false },
+  { id:6, name:"Chennai Logistics", loc:"Chennai, India", cat:"industrial", roi:"14.1%", funded:12, min:"$500", img:"https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=400&q=75", new:true },
+];
+const portDividends = [
+  { date:"Feb 5, 2026", prop:"Azure Heights Commercial", amount:"+$124.00", status:"paid" },
+  { date:"Feb 5, 2026", prop:"Nova Logistics Hub", amount:"+$125.50", status:"paid" },
+  { date:"Feb 5, 2026", prop:"Riviera Business Park", amount:"+$63.00", status:"paid" },
+  { date:"Mar 5, 2026", prop:"Azure Heights Commercial", amount:"+$124.00", status:"pending" },
+  { date:"Mar 5, 2026", prop:"Nova Logistics Hub", amount:"+$125.50", status:"pending" },
+  { date:"Jan 5, 2026", prop:"Azure Heights Commercial", amount:"+$124.00", status:"paid" },
+  { date:"Jan 5, 2026", prop:"Emerald Green Villas", amount:"+$89.50", status:"paid" },
+  { date:"Dec 5, 2025", prop:"All Properties", amount:"+$312.50", status:"paid" },
+];
+const portTxData = [
+  { date:"Feb 14, 2026", type:"buy", prop:"Azure Heights Commercial", shares:2, amount:"$1,040", status:"done" },
+  { date:"Feb 5, 2026", type:"div", prop:"Azure Heights Commercial", shares:"—", amount:"+$124.00", status:"done" },
+  { date:"Feb 5, 2026", type:"div", prop:"Nova Logistics Hub", shares:"—", amount:"+$125.50", status:"done" },
+  { date:"Jan 28, 2026", type:"sell", prop:"GreenTech Industrial", shares:1, amount:"$1,620", status:"done" },
+  { date:"Jan 15, 2026", type:"buy", prop:"Marina Bay Towers", shares:1, amount:"$1,400", status:"done" },
+  { date:"Jan 5, 2026", type:"div", prop:"Azure Heights Commercial", shares:"—", amount:"+$124.00", status:"done" },
+  { date:"Dec 20, 2025", type:"buy", prop:"Riviera Business Park", shares:2, amount:"$3,000", status:"done" },
+  { date:"Dec 10, 2025", type:"sell", prop:"Pacific View Residences", shares:1, amount:"+$1,155", status:"done" },
+];
+
+let portTradeMode = 'buy';
+let portCurrentProp = null;
+let portInitialized = false;
+
+function portInit() {
+  if (portInitialized) return;
+  portInitialized = true;
+  portRenderHoldings();
+  portRenderMarket();
+  portRenderDividends();
+  portRenderTransactions();
+  // CC-tabs
+  document.querySelectorAll('#page-portfolio .cc-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      this.closest('.cc-tabs').querySelectorAll('.cc-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      portShowToast('Loading ' + this.textContent + ' data...', 'info');
+    });
+  });
+  // Market filters
+  document.getElementById('portMarketFilters').addEventListener('click', e => {
+    if (!e.target.classList.contains('mf-btn')) return;
+    document.querySelectorAll('#portMarketFilters .mf-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    portRenderMarket(e.target.dataset.f);
+  });
+  // Tx filters
+  document.querySelectorAll('#page-portfolio .tx-filters .mf-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#page-portfolio .tx-filters .mf-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+}
+
+function portRenderHoldings(filter = '') {
+  const tbody = document.getElementById('portHoldingsBody');
+  const data = filter ? portHoldings.filter(h => h.name.toLowerCase().includes(filter.toLowerCase()) || h.loc.toLowerCase().includes(filter.toLowerCase())) : portHoldings;
+  tbody.innerHTML = data.map(h => {
+    const gain = h.value - h.invested;
+    const gainPct = ((gain / h.invested) * 100).toFixed(1);
+    const isUp = gain >= 0;
+    return `<tr class="ht-row" onclick="portOpenTrade(${h.id})">
+      <td><div class="prop-cell"><img src="${h.img}" class="prop-thumb" alt=""><div><span class="prop-name">${h.name}</span><span class="prop-cat">${h.cat} · ${h.loc}</span></div></div></td>
+      <td class="val-cell">$${h.invested.toLocaleString()}</td>
+      <td class="val-cell">$${h.value.toLocaleString()}</td>
+      <td class="chg-cell ${isUp?'up':'down'}">${isUp?'▲':'▼'} ${isUp?'+':''}${gainPct}%</td>
+      <td class="chg-cell up">${h.yield}%</td>
+      <td><div class="shares-bar-wrap"><div class="shares-bar"><div class="shares-fill" style="width:${Math.min(100,(h.shares/h.totalShares)*2000)}%"></div></div><span style="font-size:.7rem;color:var(--dim)">${h.shares} shares</span></div></td>
+      <td class="action-cell"><button class="btn-buy" onclick="event.stopPropagation();portOpenModal(${h.id},'buy')">Buy</button><button class="btn-sell" onclick="event.stopPropagation();portOpenModal(${h.id},'sell')">Sell</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function portFilterHoldings(val) { portRenderHoldings(val); }
+
+function portRenderMarket(filter = 'all') {
+  const mg = document.getElementById('portMarketGrid');
+  const data = filter === 'all' ? portMarketProps
+    : filter === 'high-yield' ? portMarketProps.filter(p => parseFloat(p.roi) >= 12)
+    : filter === 'new' ? portMarketProps.filter(p => p.new)
+    : portMarketProps.filter(p => p.cat === filter);
+  mg.innerHTML = data.map(p => `
+    <div class="mk-card">
+      <div class="mk-img"><img src="${p.img}" alt="${p.name}" loading="lazy"><span class="mk-roi">${p.roi}</span>${p.new ? '<span style="position:absolute;top:.5rem;left:.5rem;background:rgba(245,158,11,.9);color:#000;font-size:.65rem;padding:.15rem .45rem;border-radius:4px;font-weight:700;font-family:Syne,sans-serif">NEW</span>' : ''}</div>
+      <div class="mk-name">${p.name}</div>
+      <div class="mk-loc">📍 ${p.loc}</div>
+      <div class="mk-bar"><div class="mk-fill" style="width:${p.funded}%"></div></div>
+      <div class="mk-meta"><span>${p.funded}% Funded</span><span>Min ${p.min}</span></div>
+      <div class="mk-actions"><button class="btn-buy" onclick="portOpenMarketBuy(${p.id})">Buy Shares</button><button class="btn-ghost" style="padding:.35rem .7rem;font-size:.72rem" onclick="portShowToast('Opening property details...','info')">View →</button></div>
+    </div>`).join('');
+}
+
+function portOpenMarketBuy(id) {
+  const p = portMarketProps.find(x => x.id === id);
+  if (!p) return;
+  portCurrentProp = { ...p, invested: 0, value: 0, roi: parseFloat(p.roi), shares: 0, sharePrice: parseInt(p.min.replace('$','').replace(',','')) };
+  portOpenTradeModal(p.name, p.loc, p.roi, p.img, 'buy');
+}
+
+function portRenderDividends() {
+  document.getElementById('portDivTimeline').innerHTML = portDividends.map(d => `
+    <div class="dt-item">
+      <span class="dt-date">${d.date.split(',')[0]}</span>
+      <span class="dt-prop">${d.prop}</span>
+      <span class="dt-status ${d.status === 'paid' ? 'dt-paid' : 'dt-pending'}">${d.status === 'paid' ? '✓ Paid' : '⏳ Upcoming'}</span>
+      <span class="dt-amount">${d.amount}</span>
+    </div>`).join('');
+}
+
+function portRenderTransactions() {
+  const typeMap = { buy:'badge-buy', sell:'badge-sell', div:'badge-div', pending:'badge-pending' };
+  const labelMap = { buy:'Buy', sell:'Sell', div:'Dividend', pending:'Pending' };
+  document.getElementById('portTxBody').innerHTML = portTxData.map(tx => `
+    <tr>
+      <td style="color:var(--dim);font-size:.8rem">${tx.date}</td>
+      <td><span class="tx-type-badge ${typeMap[tx.type]}">${labelMap[tx.type]}</span></td>
+      <td style="font-weight:500;font-size:.85rem">${tx.prop}</td>
+      <td style="font-size:.82rem;color:var(--dim)">${tx.shares}</td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700;${tx.type==='div'||tx.type==='sell'?'color:var(--em)':tx.type==='buy'?'color:var(--red)':''}">${tx.amount}</td>
+      <td><span class="tx-status ${tx.status==='done'?'done':'pend'}">${tx.status==='done'?'✓ Settled':'⏳ Pending'}</span></td>
+    </tr>`).join('');
+}
+
+function portOpenTrade(id) {
+  const h = portHoldings.find(x => x.id === id);
+  if (!h) return;
+  portOpenTradeModal(h.name, h.loc, h.roi+'%', h.img, 'buy');
+  portCurrentProp = h;
+}
+
+function portOpenModal(id, mode) {
+  const h = portHoldings.find(x => x.id === id);
+  if (!h) return;
+  portCurrentProp = { ...h, sharePrice: Math.round(h.invested / h.shares) };
+  portOpenTradeModal(h.name, h.loc, h.roi+'%', h.img, mode);
+}
+
+function portOpenTradeModal(name, loc, roi, img, mode) {
+  document.getElementById('port-modal-name').textContent = name;
+  document.getElementById('port-modal-loc').textContent = '📍 ' + loc;
+  document.getElementById('port-modal-roi').textContent = roi + ' ROI';
+  document.getElementById('port-modal-img').src = img;
+  document.getElementById('port-modal-shares').value = 1;
+  portSetTradeMode(mode);
+  document.getElementById('portTradeModal').classList.add('open');
+  portUpdateOrderSummary();
+}
+
+function portCloseModal() { document.getElementById('portTradeModal').classList.remove('open'); }
+
+function portSetTradeMode(mode) {
+  portTradeMode = mode;
+  const tabBuy = document.getElementById('portTabBuy');
+  const tabSell = document.getElementById('portTabSell');
+  const inp = document.getElementById('port-modal-shares');
+  const btn = document.getElementById('portConfirmBtn');
+  tabBuy.classList.toggle('active', mode === 'buy');
+  tabSell.classList.toggle('active', mode === 'sell');
+  inp.classList.toggle('sell-mode', mode === 'sell');
+  if (mode === 'buy') { document.getElementById('port-modal-label').textContent = 'NUMBER OF SHARES TO BUY'; btn.className = 'btn-confirm-buy'; btn.textContent = 'Confirm Purchase'; }
+  else { document.getElementById('port-modal-label').textContent = 'NUMBER OF SHARES TO SELL'; btn.className = 'btn-confirm-sell'; btn.textContent = 'Confirm Sale'; }
+  portUpdateOrderSummary();
+}
+
+function portUpdateOrderSummary() {
+  const shares = parseInt(document.getElementById('port-modal-shares').value) || 1;
+  const sp = portCurrentProp?.sharePrice || 500;
+  const total = shares * sp;
+  const estReturn = ((total * (portCurrentProp?.roi || 12)) / 100).toFixed(2);
+  const fee = (total * 0.015).toFixed(2);
+  const net = portTradeMode === 'buy' ? (total + parseFloat(fee)).toFixed(2) : (total - parseFloat(fee)).toFixed(2);
+  document.getElementById('portOrderSummary').innerHTML = `
+    <div class="os-row"><span>Shares × $${sp}</span><span>${shares} × $${sp.toLocaleString()} = $${total.toLocaleString()}</span></div>
+    ${portTradeMode === 'buy' ? `<div class="os-row"><span>Est. Annual Return</span><span style="color:var(--em)">+$${estReturn}</span></div>` : ''}
+    <div class="os-row"><span>Platform Fee (1.5%)</span><span>$${fee}</span></div>
+    <div class="os-row"><span>Total ${portTradeMode === 'buy' ? 'Payable' : 'Receivable'}</span><span style="color:${portTradeMode==='buy'?'var(--red)':'var(--em)'}">$${net}</span></div>`;
+}
+
+function portConfirmTrade() {
+  const shares = parseInt(document.getElementById('port-modal-shares').value) || 1;
+  const name = document.getElementById('port-modal-name').textContent;
+  const sp = portCurrentProp?.sharePrice || 500;
+  const total = (shares * sp * (portTradeMode === 'buy' ? 1.015 : 0.985)).toFixed(0);
+  portCloseModal();
+  portShowToast(`${portTradeMode === 'buy' ? '✅ Purchased' : '✅ Sold'} ${shares} share(s) in ${name} for $${Number(total).toLocaleString()}`, 'success');
+}
+
+function portSwitchPanel(id, btn) {
+  document.querySelectorAll('#page-portfolio .port-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('port-panel-' + id).classList.add('active');
+  document.querySelectorAll('#page-portfolio .nt').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#page-portfolio .sb-item').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('#page-portfolio .nt').forEach(b => { if(b.textContent.toLowerCase().includes(id.slice(0,4))) b.classList.add('active'); });
+}
+
+function portShowToast(msg, type = 'success') {
+  const t = document.getElementById('portToast');
+  t.textContent = (type === 'success' ? '✅ ' : type === 'error' ? '❌ ' : 'ℹ️ ') + msg;
+  t.className = `port-toast ${type} show`;
+  setTimeout(() => t.className = 'port-toast', 3500);
+}
+
+// ══════════════════════════════════════════
+//  PROFILE PAGE LOGIC
+// ══════════════════════════════════════════
+const profActLog = [
+  { icon:'🔐', bg:'rgba(16,185,129,.1)', title:'Login from Mumbai, India', sub:'Chrome on Mac · Feb 22, 2026 · 9:41 AM', time:'Now' },
+  { icon:'💰', bg:'rgba(6,182,212,.1)', title:'Dividend received from Azure Heights', sub:'$124.00 credited to wallet', time:'Feb 5' },
+  { icon:'📊', bg:'rgba(59,130,246,.1)', title:'Portfolio report downloaded', sub:'January 2026 report', time:'Feb 1' },
+  { icon:'🔒', bg:'rgba(139,92,246,.1)', title:'Password changed successfully', sub:'From Mumbai, India', time:'Jan 20' },
+  { icon:'🏢', bg:'rgba(245,158,11,.1)', title:'Invested in Azure Heights Commercial', sub:'2 shares · $1,040', time:'Feb 14' },
+  { icon:'👤', bg:'rgba(16,185,129,.1)', title:'Profile information updated', sub:'Address and phone number', time:'Jan 15' },
+  { icon:'🏦', bg:'rgba(59,130,246,.1)', title:'Bank account added', sub:'SBI ••9087 · Verification pending', time:'Jan 10' },
+  { icon:'🆔', bg:'rgba(16,185,129,.1)', title:'KYC verification completed', sub:'Video KYC · Identity confirmed', time:'Jan 5' },
+  { icon:'🎉', bg:'rgba(245,158,11,.1)', title:'Account created', sub:'Welcome to InvestR!', time:'Jan 3, 2024' },
+];
+
+let profInitialized = false;
+
+function profInit() {
+  if (profInitialized) return;
+  profInitialized = true;
+  const profReferrals = [
+    {name:'Priya S.',date:'Feb 10, 2026',status:'Invested',earn:'$25'},
+    {name:'Arjun M.',date:'Jan 28, 2026',status:'Invested',earn:'$25'},
+    {name:'Neha R.',date:'Jan 15, 2026',status:'Signed Up',earn:'Pending'},
+    {name:'Karan T.',date:'Dec 20, 2025',status:'Invested',earn:'$25'}
+  ];
+  document.getElementById('profReferralList').innerHTML = profReferrals.map(r => `
+    <div style="display:flex;align-items:center;gap:1rem;padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.04)">
+      <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--em),var(--cyan));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.78rem;flex-shrink:0">${r.name.charAt(0)}</div>
+      <div style="flex:1"><strong style="font-size:.88rem;display:block">${r.name}</strong><span style="font-size:.72rem;color:var(--dim)">${r.date}</span></div>
+      <span style="font-size:.72rem;font-weight:700;font-family:'Syne',sans-serif;padding:.2rem .55rem;border-radius:5px;${r.status==='Invested'?'background:rgba(16,185,129,.1);color:var(--em)':'background:rgba(245,158,11,.08);color:var(--amber)'}">${r.status}</span>
+      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;color:${r.earn==='Pending'?'var(--muted)':'var(--em)'}">${r.earn}</span>
+    </div>`).join('');
+  document.getElementById('profActivityLog').innerHTML = profActLog.map(a => `
+    <div class="al-item">
+      <div class="al-icon" style="background:${a.bg}">${a.icon}</div>
+      <div class="al-info"><strong>${a.title}</strong><span>${a.sub}</span></div>
+      <span class="al-time">${a.time}</span>
+    </div>`).join('');
+}
+
+function profSwitchSection(id, btn) {
+  document.querySelectorAll('#page-profile .prof-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('prof-sec-' + id).classList.add('active');
+  document.querySelectorAll('#page-profile .qn-item').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelector('#page-profile .right-content').scrollTop = 0;
+}
+
+function profToggleEdit(formId) {
+  const form = document.getElementById(formId);
+  const inputs = form.querySelectorAll('input, select, textarea');
+  const disabled = inputs[0]?.disabled;
+  inputs.forEach(i => i.disabled = !disabled);
+  if (!disabled) profShowToast('Changes saved!', 'success');
+  else profShowToast('Editing enabled. Make your changes.', 'info');
+}
+
+function profSaveProfile() {
+  const name = (document.getElementById('profFirstName')?.value || 'Rahul') + ' ' + (document.getElementById('profLastName')?.value || 'Kumar');
+  document.getElementById('profDisplayName').textContent = name;
+  const init = name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('profAvatarDisplay').textContent = init;
+  profShowToast('Profile saved successfully!', 'success');
+}
+
+function profCopyRef() {
+  navigator.clipboard.writeText('RAHUL2024').then(() => profShowToast('Referral code copied!', 'success'));
+}
+
+function profShowToast(msg, type = 'success') {
+  const t = document.getElementById('profToast');
+  t.textContent = (type === 'success' ? '✅ ' : type === 'error' ? '❌ ' : 'ℹ️ ') + msg;
+  t.className = `prof-toast ${type} show`;
+  setTimeout(() => t.className = 'prof-toast', 3500);
+}
+
+// ══════════════════════════════════════════
+//  LIST PROPERTY PAGE LOGIC
+// ══════════════════════════════════════════
+let listCurrentStep = 1;
+let listSelectedType = 'commercial';
+const listUploadedFiles = { photos: [], docs: [] };
+
+document.querySelectorAll('#listTypeGrid .type-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('#listTypeGrid .type-card').forEach(c => c.classList.remove('sel'));
+    card.classList.add('sel');
+    listSelectedType = card.dataset.type;
+  });
+});
+
+function listGoToStep(step) {
+  if (step > listCurrentStep && !listValidateStep(listCurrentStep)) return;
+  for (let i = 1; i <= 5; i++) {
+    document.getElementById('listSec' + i).classList.remove('active-sec');
+    const pill = document.querySelector(`#listStepsRow .step-pill[data-step="${i}"]`);
+    if (i < step) { pill.classList.add('done'); pill.classList.remove('active'); }
+    else if (i === step) { pill.classList.add('active'); pill.classList.remove('done'); }
+    else { pill.classList.remove('active', 'done'); }
+  }
+  document.getElementById('listSec' + step).classList.add('active-sec');
+  listCurrentStep = step;
+  document.getElementById('listProgFill').style.width = ((step / 5) * 100) + '%';
+  if (step === 5) listPopulatePreview();
+  document.getElementById('page-list').scrollTop = 0;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function listValidateStep(step) {
+  if (step === 1) {
+    const name = document.getElementById('listPropName').value.trim();
+    const country = document.getElementById('listPropCountry').value;
+    const city = document.getElementById('listPropCity').value.trim();
+    if (!name) { listShowToast('Please enter the property name', 'error'); return false; }
+    if (!country) { listShowToast('Please select a country', 'error'); return false; }
+    if (!city) { listShowToast('Please enter the city', 'error'); return false; }
+  }
+  if (step === 2) {
+    const area = document.getElementById('listArea').value;
+    const desc = document.getElementById('listDesc').value.trim();
+    if (!area) { listShowToast('Please enter the property area', 'error'); return false; }
+    if (desc.split(' ').length < 15) { listShowToast('Please write a more detailed description (min. 15 words)', 'error'); return false; }
+  }
+  if (step === 3) {
+    const price = document.getElementById('listAskPrice').value;
+    const roi = document.getElementById('listTargetROI').value;
+    const term = document.getElementById('listTerm').value;
+    if (!price) { listShowToast('Please enter the property valuation', 'error'); return false; }
+    if (!roi) { listShowToast('Please enter the target ROI', 'error'); return false; }
+    if (!term) { listShowToast('Please select an investment term', 'error'); return false; }
+  }
+  if (step === 4) {
+    const name = document.getElementById('listOwnerName').value.trim();
+    const email = document.getElementById('listOwnerEmail').value.trim();
+    const phone = document.getElementById('listOwnerPhone').value.trim();
+    if (!name) { listShowToast('Please enter your full name', 'error'); return false; }
+    if (!email || !email.includes('@')) { listShowToast('Please enter a valid email', 'error'); return false; }
+    if (!phone) { listShowToast('Please enter your phone number', 'error'); return false; }
+  }
+  return true;
+}
+
+function listCalcNOI() {
+  const gross = parseFloat(document.getElementById('listGrossRent').value) || 0;
+  const opEx = parseFloat(document.getElementById('listOpEx').value) || 0;
+  if (gross > 0) document.getElementById('listNoi').value = (gross - opEx).toFixed(0);
+}
+
+function listPopulatePreview() {
+  const name = document.getElementById('listPropName').value || '—';
+  const city = document.getElementById('listPropCity').value || '';
+  const country = document.getElementById('listPropCountry').value || '';
+  const price = document.getElementById('listAskPrice').value;
+  const roi = document.getElementById('listTargetROI').value;
+  const term = document.getElementById('listTerm').value || '—';
+  const occ = document.getElementById('listOccupancy').value;
+  const dist = document.getElementById('listDistrib').value || '—';
+  const minInv = document.getElementById('listMinInvest').value;
+  document.getElementById('list-pv-name').textContent = name;
+  document.getElementById('list-pv-type').textContent = listSelectedType.charAt(0).toUpperCase() + listSelectedType.slice(1);
+  document.getElementById('list-pv-loc').textContent = [city, country].filter(Boolean).join(', ') || '—';
+  document.getElementById('list-pv-val').textContent = price ? '$' + Number(price).toLocaleString() : '—';
+  document.getElementById('list-pv-roi').textContent = roi ? roi + '%' : '—';
+  document.getElementById('list-pv-term').textContent = term;
+  document.getElementById('list-pv-occ').textContent = occ ? occ + '%' : '—';
+  document.getElementById('list-pv-dist').textContent = dist;
+  document.getElementById('list-pv-min').textContent = minInv ? '$' + Number(minInv).toLocaleString() : '—';
+}
+
+function listSubmitListing() {
+  const chks = ['listAgreeTerms','listAgreeAccuracy','listAgreeComply','listAgreeContact'];
+  for (const id of chks) {
+    if (!document.getElementById(id).checked) { listShowToast('Please check all required agreements', 'error'); return; }
+  }
+  const btn = document.getElementById('listSubmitBtn');
+  btn.textContent = '⏳ Submitting...';
+  btn.disabled = true;
+  setTimeout(() => {
+    document.getElementById('listSec5').classList.remove('active-sec');
+    const suc = document.getElementById('listSuccessSec');
+    suc.classList.add('active-sec', 'show');
+    const refId = 'INV-2025-' + Math.random().toString(36).substr(2,6).toUpperCase();
+    document.getElementById('listRefId').textContent = refId;
+    document.getElementById('listProgFill').style.width = '100%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    listShowToast('Listing submitted successfully! 🎉', 'success');
+  }, 1800);
+}
+
+function listCopyRef() {
+  const ref = document.getElementById('listRefId').textContent;
+  navigator.clipboard.writeText(ref).then(() => listShowToast('Reference ID copied!', 'success'));
+}
+
+function listToggleDoc(el, id) {
+  el.classList.toggle('checked');
+  const cb = document.getElementById('listcb-' + id);
+  cb.textContent = el.classList.contains('checked') ? '✓' : '';
+}
+
+function listHandleFiles(input, type) {
+  const files = Array.from(input.files);
+  files.forEach(f => {
+    if (!listUploadedFiles[type].find(u => u.name === f.name)) listUploadedFiles[type].push(f);
+  });
+  listRenderUploaded(type);
+}
+
+function listRenderUploaded(type) {
+  const container = document.getElementById('list-' + type + '-preview');
+  container.innerHTML = '';
+  listUploadedFiles[type].forEach((f, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'uf-chip';
+    chip.innerHTML = `${type === 'photos' ? '🖼️' : '📄'} ${f.name.length > 22 ? f.name.substr(0,22)+'...' : f.name} <button onclick="listRemoveFile('${type}',${i});event.stopPropagation()">×</button>`;
+    container.appendChild(chip);
+  });
+  if (listUploadedFiles[type].length > 0) listShowToast(`${listUploadedFiles[type].length} file(s) ready`, 'success');
+}
+
+function listRemoveFile(type, i) { listUploadedFiles[type].splice(i, 1); listRenderUploaded(type); }
+function listDragOver(e, id) { e.preventDefault(); document.getElementById(id).classList.add('drag'); }
+function listDragLeave(id) { document.getElementById(id).classList.remove('drag'); }
+function listDropFiles(e, id, type) {
+  e.preventDefault(); listDragLeave(id);
+  const dt = new DataTransfer();
+  Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
+  const input = document.getElementById(id).querySelector('input[type=file]');
+  input.files = dt.files;
+  listHandleFiles(input, type);
+}
+
+function listShowToast(msg, type = 'success') {
+  const t = document.getElementById('listToast');
+  t.textContent = (type === 'success' ? '✅ ' : '❌ ') + msg;
+  t.className = `list-toast ${type} show`;
+  setTimeout(() => t.className = 'list-toast', 3500);
+}
+</script>
+</body>
+</html>
